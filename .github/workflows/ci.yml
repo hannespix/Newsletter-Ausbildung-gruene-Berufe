@@ -1,0 +1,29 @@
+name: Newsletter-Check
+
+# Prüft bei jedem Push und Pull Request, dass der Newsletter nichts nachlädt,
+# baut die versandfertigen Dateien und legt sie als Artefakt ab. So lässt sich
+# der Stand auch ohne lokale Python-Installation herunterladen und prüfen.
+# Schlägt ein Schritt fehl, wird der PR rot -> Merge blockiert.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Auf externe Referenzen prüfen
+        run: python3 tools/check_offline.py
+      - name: Newsletter bauen (Vorschau, .eml, .txt)
+        run: python3 tools/build_newsletter.py
+      - name: Versandfertige Dateien als Artefakt ablegen
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsletter
+          path: dist/
+          retention-days: 30

@@ -1,0 +1,147 @@
+# Newsletter „Ausbildung Grüne Berufe“ — HTML-E-Mail im Landesdesign
+
+Newsletter der **Ausbildungsberatung Grüne Berufe** (Regierungspräsidium
+Freiburg, Referat 31) an die Ausbildungsbetriebe – als HTML-E-Mail im
+Corporate Design des Landes Baden-Württemberg (https://design.landbw.de),
+gebaut auf der gemeinsamen Vorlage `Vorlage-Tool-im-Landesdesign`. Inhalte und
+Anhänge kommen aus dem Repo `Rechte-und-Pflichten-von-Azubis`.
+
+**Aktuelle Ausgabe:** September 2026 – Start des Ausbildungsjahres (Urlaub im
+Abschlussjahr, Leitfaden „Rechte und Pflichten“, Einladung zum Ausbildertag).
+
+- **Design & Technik:** [`CLAUDE.md`](CLAUDE.md)
+- **Prozess / Loop:** [`AGENTS.md`](AGENTS.md)
+- **Ausgaben:** [`ROADMAP.md`](ROADMAP.md)
+
+---
+
+## In fünf Schritten zum Versand
+
+1. **Platzhalter füllen.** In `newsletter.html` alle Stellen in eckigen Klammern
+   ersetzen: `[Datum und Uhrzeit]`, `[Veranstaltungsort]`, `[Themen und
+   Programm …]`, `[Anmeldeweg] bis [Datum]`. Der Build listet offene Platzhalter
+   auf. Den Anmelde-Button (`mailto:` mit Betreff „Anmeldung zum Ausbildertag“)
+   bei Bedarf auf ein Online-Formular umstellen.
+2. **Anhänge ablegen.** Die PDFs aus `Rechte-und-Pflichten-von-Azubis/pdf/` nach
+   `anhang/` kopieren (Leitfaden für Betriebe, Azubi-Info). Alles in `anhang/`
+   hängt automatisch an der E-Mail – Details in [`anhang/README.md`](anhang/README.md).
+3. **Bauen.**
+   ```bash
+   python3 tools/build_newsletter.py
+   ```
+   Erzeugt in `dist/`: `newsletter.eml` (Versand), `newsletter.html` (Vorschau
+   im Browser), `newsletter.txt` (Nur-Text-Fassung). Mit `--streng` bricht der
+   Build bei offenen Platzhaltern ab.
+4. **Prüfen.** `dist/newsletter.html` im Browser ansehen (auch schmal ziehen),
+   dann eine Testmail an die eigene Adresse und an eine externe Adresse
+   (z. B. ein Gmail-Konto) schicken.
+5. **Versenden.** `dist/newsletter.eml` in Outlook öffnen, Empfänger in **Bcc**,
+   Anhänge prüfen, senden. Bei großen Verteilern in mehreren Tranchen
+   (Grenzen des Mailservers beachten).
+
+### Ohne Python: Build aus GitHub Actions
+
+Bei jedem Push baut der Workflow **„Newsletter-Check“** den Newsletter und legt
+`dist/` als Artefakt ab: *Actions → Lauf öffnen → Artefakt „newsletter“
+herunterladen.* Die Anhänge liegen nicht im Repo, dieses `.eml` enthält also
+keine PDFs – in Outlook vor dem Senden anhängen.
+
+---
+
+## Versandwege im Detail
+
+**Outlook (klassisch).** Doppelklick auf `newsletter.eml` öffnet die Datei dank
+der Kopfzeile `X-Unsent: 1` direkt als neue, noch nicht gesendete Nachricht –
+Empfänger in Bcc, Anhänge prüfen, senden. Erscheint stattdessen ein Lesefenster
+(etwa weil das neue Outlook oder Windows Mail für `.eml` zuständig ist): die
+Datei per Drag-and-drop in den Ordner **Entwürfe** ziehen und dort öffnen, oder
+**Weiterleiten** wählen und den Betreff bereinigen.
+
+**Thunderbird.** *Datei → Öffnen → Gespeicherte Nachricht öffnen*, dann
+*Nachricht → Als neu bearbeiten*. Thunderbird sendet das HTML unverändert.
+
+**Newsletter-System.** Quelltext von `dist/newsletter.html` übernehmen, das Logo
+im System als Bild hochladen und die beiden eingebetteten `data:`-Bildquellen
+durch die Bild-URLs des Systems ersetzen. Die Nur-Text-Fassung liegt in
+`dist/newsletter.txt`.
+
+> **Gut zu wissen:** Outlook wandelt HTML beim Senden in sein eigenes Format um
+> (Word-Engine). Runde Ecken und die mobilen Umbrüche gehen dabei verloren. Das
+> Layout ist deshalb bewusst tabellenbasiert und 600 px breit, damit es auch
+> danach in allen gängigen Programmen sauber aussieht. Testmail vor dem
+> Versand ist Pflicht.
+
+---
+
+## Aufbau der Ausgabe
+
+| Baustein | Landes-CD |
+|----------|-----------|
+| Kopf mit RPF-Logo links | CI-Header-Muster (Logo links) |
+| Gelbe Titelfläche, Serif-Überschrift mit Punkt | BaWü Gelb als Fläche, Text darauf schwarz |
+| Inhaltsübersicht mit gelben Nummern | Karte (`.bw-card`-Optik) |
+| Kapitelköpfe: gelbes Nummernquadrat, Serif-Titel, gelbe Linie | wie im Leitfaden „Klar handeln in der Ausbildung“ |
+| Tabelle Urlaubsanspruch mit **einem** gelb hervorgehobenen Wert | Infografik-Regel: Gelb nur für einen Wert |
+| ✓-Liste, Hinweiskasten (grau, schwarzer Balken) | `.bw-hinweis` |
+| Zwei Dokument-Karten (halbiert) | `.bw-flaechen.bw-halb` |
+| Schwarze Einladungsfläche mit rundem Störer und gelbem Button | `.bw-flaeche--schwarz`, `.bw-stoerer`, `.bw-btn--gelb` |
+| Kontaktkasten, schwarzer Fuß mit Negativ-Logo, Impressum/Datenschutz/Abmelden | `.bw-footer` |
+
+Farben und Schriften stehen in `newsletter.html` ausschließlich als
+`var(--bw-*)` aus `bw-theme.css`. Der Build setzt die festen Werte ein, weil
+E-Mail-Programme keine CSS-Variablen verstehen – das Theme bleibt trotzdem die
+einzige Quelle.
+
+**Schriften:** Die Landesschriften BaWue Sans/Serif stehen im Schriftstapel an
+erster Stelle und greifen überall, wo sie installiert sind (Landesverwaltung).
+Sonst gelten die Fallbacks Georgia (Überschriften) und Arial/Systemschrift
+(Text). Schriftdateien werden nicht mitgeschickt: E-Mail-Programme laden keine
+eingebetteten Fonts, und die Web-Lizenz erlaubt keine Weitergabe an Empfänger.
+
+---
+
+## Technik: Regeln für HTML-E-Mails (Kurzfassung, Details in `CLAUDE.md`)
+
+- Tabellen-Layout mit `role="presentation"`, 600 px breit, alle Styles inline,
+  Farben doppelt (`bgcolor` und `background-color`), Bilder mit `width`/`height`.
+- Outlook-Sonderwege: Geistertabelle, `<!--[if mso]>`-Schriftstapel, Störer und
+  Button zusätzlich als VML.
+- Media Queries nur als Bonus für mobile Clients, nie als Voraussetzung.
+- **Nichts wird nachgeladen:** keine externen Bilder, keine Zählpixel, keine
+  Web-Fonts. Das Logo geht als Inline-Anhang (Content-ID) mit.
+  ```bash
+  python3 tools/check_offline.py     # findet externe Lade-Referenzen (läuft im CI)
+  ```
+- HTML unter 100 KB halten (Gmail kürzt darüber).
+
+---
+
+## Struktur
+
+```
+newsletter.html              die aktuelle Ausgabe (Quelle mit --bw-* Tokens)
+bw-theme.css                 Design-System, Single Source of Truth (aus der Vorlage)
+assets/logo/                 RPF-Logo positiv/negativ — lizenzpflichtig, Repo privat
+anhang/                      Anhänge der E-Mail (nicht versioniert)
+tools/build_newsletter.py    Build: Tokens auflösen, Logo einbetten, .eml/.html/.txt
+tools/check_offline.py       Offline-/CDN-Prüfung (CI-Gate)
+.github/workflows/ci.yml     Offline-Check + Build + Artefakt bei jedem Push/PR
+.github/workflows/claude.yml @claude-Loop (Issue/PR → Branch → PR)
+.github/ISSUE_TEMPLATE/      Vorlagen für Ausgaben und Aufgaben
+CLAUDE.md AGENTS.md ROADMAP.md
+```
+
+---
+
+## Recht & Lizenz
+
+- **Repository privat halten.** Das RPF-Logo in `assets/logo/` ist geschützt
+  (`assets/logo/LIZENZ.md`). Wird das Repo je öffentlich, Logo ausschließen und
+  aus der Historie entfernen – der Build setzt dann eine Wortmarke ein.
+- Die Leitfaden-PDFs enthalten lizenzierte Schriften und Bildmaterial; sie
+  bleiben im Repo `Rechte-und-Pflichten-von-Azubis` und werden nur lokal nach
+  `anhang/` kopiert.
+- **Keine Empfängerdaten ins Repo.** Verteiler werden außerhalb gepflegt
+  (Outlook-Kontaktgruppe, Fachverfahren). Versand immer per Bcc.
+- Rechtsaussagen (z. B. Urlaubsansprüche) stammen vom Fachbereich und werden
+  nur dort geändert – siehe `AGENTS.md`, Stop-Bedingungen.
