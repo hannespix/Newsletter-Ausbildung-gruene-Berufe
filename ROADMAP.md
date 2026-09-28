@@ -1,7 +1,8 @@
 # ROADMAP — Ausgaben
 
-> Zweck: Newsletter der Ausbildungsberatung Grüne Berufe (RP Freiburg, Referat 31)
-> an die Ausbildungsbetriebe – als HTML-E-Mail im Landesdesign.
+> Zweck: Ausbilder-Info der Ausbildungsberatung Grüne Berufe (RP Freiburg,
+> Referat 31) an die Ausbildungsbetriebe – als HTML-E-Mail im Landesdesign.
+> In der Mail nie „Newsletter“: keine Erwartung regelmäßiger Post schüren.
 > Zielgruppe: Ausbilderinnen und Ausbilder im Regierungsbezirk Freiburg.
 > Versand: aus Outlook (Bcc) über `dist/newsletter.eml`, siehe README.
 
@@ -13,10 +14,15 @@ damit `newsletter.html` für die nächste Ausgabe frei ist.
 
 ## A1 — September 2026: Start des Ausbildungsjahres
 **Inhalt:** Urlaub im Abschlussjahr · Leitfaden „Rechte und Pflichten“ (Anhang) ·
-Einladung zum Ausbildertag.
-**Done:** Build läuft ohne Fehler, Offline-Check grün, Platzhalter zum
-Ausbildertag ausgefüllt, Testmail in Outlook und an eine externe Adresse
-geprüft, Anhänge dabei. **Status:** Gerüst und Inhalt stehen, Platzhalter offen.
+Save the Date zum Ausbildertag (nur Termin und Ort, noch keine Anmeldung).
+**Done:** Build läuft ohne Fehler, Offline-Check grün, Termin und Ort
+eingetragen, Testmail in Outlook und an eine externe Adresse geprüft, Anhänge
+dabei. **Status:** Gerüst und Inhalt stehen, Termin und Ort offen.
+
+## A2 — Einladung zum Ausbildertag
+**Inhalt:** Programm, Anmeldeweg und Frist, Anmelde-Button (Baustein liegt in
+der Git-Historie von A1: gelber Button mit `mailto:`, alternativ Formular-Link).
+**Done:** eigene Aussendung, sobald Programm und Anmeldung feststehen.
 
 ## Ideen für weitere Ausgaben
 - **Foto oder Illustration** in der Titelfläche – nur mit Nutzungsrechten des RPF

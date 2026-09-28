@@ -1,13 +1,17 @@
-# Newsletter „Ausbildung Grüne Berufe“ — HTML-E-Mail im Landesdesign
+# Ausbilder-Info „Grüne Berufe“ — HTML-E-Mail im Landesdesign
 
-Newsletter der **Ausbildungsberatung Grüne Berufe** (Regierungspräsidium
+E-Mail-Information der **Ausbildungsberatung Grüne Berufe** (Regierungspräsidium
 Freiburg, Referat 31) an die Ausbildungsbetriebe – als HTML-E-Mail im
 Corporate Design des Landes Baden-Württemberg (https://design.landbw.de),
 gebaut auf der gemeinsamen Vorlage `Vorlage-Tool-im-Landesdesign`. Inhalte und
 Anhänge kommen aus dem Repo `Rechte-und-Pflichten-von-Azubis`.
 
 **Aktuelle Ausgabe:** September 2026 – Start des Ausbildungsjahres (Urlaub im
-Abschlussjahr, Leitfaden „Rechte und Pflichten“, Einladung zum Ausbildertag).
+Abschlussjahr, Leitfaden „Rechte und Pflichten“, Save the Date zum Ausbildertag).
+
+> In der Mail heißt es bewusst **„Ausbilder-Info“**, nicht „Newsletter“, und es
+> gibt keine Ausgabennummer: Es soll keine Erwartung regelmäßiger Post entstehen.
+> „Newsletter“ ist nur der interne Name von Repo, Build und Dateien.
 
 - **Design & Technik:** [`CLAUDE.md`](CLAUDE.md)
 - **Prozess / Loop:** [`AGENTS.md`](AGENTS.md)
@@ -18,10 +22,10 @@ Abschlussjahr, Leitfaden „Rechte und Pflichten“, Einladung zum Ausbildertag)
 ## In fünf Schritten zum Versand
 
 1. **Platzhalter füllen.** In `newsletter.html` alle Stellen in eckigen Klammern
-   ersetzen: `[Datum und Uhrzeit]`, `[Veranstaltungsort]`, `[Themen und
-   Programm …]`, `[Anmeldeweg] bis [Datum]`. Der Build listet offene Platzhalter
-   auf. Den Anmelde-Button (`mailto:` mit Betreff „Anmeldung zum Ausbildertag“)
-   bei Bedarf auf ein Online-Formular umstellen.
+   ersetzen: `[Datum]` und `[Veranstaltungsort]` des Ausbildertags. Der Build
+   listet offene Platzhalter auf. Abschnitt 3 ist bewusst nur ein Save the Date;
+   Programm, Anmeldeweg und ein Anmelde-Button kommen mit der eigentlichen
+   Einladung (siehe `ROADMAP.md`).
 2. **Anhänge ablegen.** Die PDFs aus `Rechte-und-Pflichten-von-Azubis/pdf/` nach
    `anhang/` kopieren (Leitfaden für Betriebe, Azubi-Info). Alles in `anhang/`
    hängt automatisch an der E-Mail – Details in [`anhang/README.md`](anhang/README.md).
@@ -78,13 +82,13 @@ durch die Bild-URLs des Systems ersetzen. Die Nur-Text-Fassung liegt in
 | Baustein | Landes-CD |
 |----------|-----------|
 | Kopf mit RPF-Logo links | CI-Header-Muster (Logo links) |
-| Gelbe Titelfläche, Serif-Überschrift mit Punkt | BaWü Gelb als Fläche, Text darauf schwarz |
+| Gelbe Titelfläche „Ausbilder-Info …“, Serif-Überschrift mit Punkt | BaWü Gelb als Fläche, Text darauf schwarz |
 | Inhaltsübersicht mit gelben Nummern | Karte (`.bw-card`-Optik) |
 | Kapitelköpfe: gelbes Nummernquadrat, Serif-Titel, gelbe Linie | wie im Leitfaden „Klar handeln in der Ausbildung“ |
 | Tabelle Urlaubsanspruch mit **einem** gelb hervorgehobenen Wert | Infografik-Regel: Gelb nur für einen Wert |
 | ✓-Liste, Hinweiskasten (grau, schwarzer Balken) | `.bw-hinweis` |
 | Zwei Dokument-Karten (halbiert) | `.bw-flaechen.bw-halb` |
-| Schwarze Einladungsfläche mit rundem Störer und gelbem Button | `.bw-flaeche--schwarz`, `.bw-stoerer`, `.bw-btn--gelb` |
+| Schwarze Save-the-Date-Fläche mit rundem Störer (Button erst mit der Einladung) | `.bw-flaeche--schwarz`, `.bw-stoerer`, `.bw-btn--gelb` |
 | Kontaktkasten, schwarzer Fuß mit Negativ-Logo, Impressum/Datenschutz/Abmelden | `.bw-footer` |
 
 Farben und Schriften stehen in `newsletter.html` ausschließlich als

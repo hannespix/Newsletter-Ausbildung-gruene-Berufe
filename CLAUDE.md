@@ -64,6 +64,9 @@ Tracking):
 - **Nur-Text-Alternative** erzeugt der Build aus dem HTML — Struktur so halten,
   dass die Textfassung lesbar bleibt (Überschriften, Absätze, Tabellenzeilen).
 - **Betreff** = `<title>`; **Vorschautext** = verborgener Preheader am Anfang.
+- **Bezeichnung in der Mail:** „Ausbilder-Info“, nie „Newsletter“, keine
+  Ausgabennummern – es soll keine Erwartung regelmäßiger Post entstehen.
+  „Newsletter“ ist nur der interne Name von Repo, Build und Dateien.
 - **Absender** ist das Funktionspostfach `abteilung3@rpf.bwl.de`; Empfänger nur
   per **Bcc**; Abmeldehinweis und Impressum/Datenschutz im Fuß sind Pflicht.
 
@@ -91,15 +94,17 @@ Quadrat mit Serif-Nummer, Serif-Titel, 2 px gelbe Linie — wie im Leitfaden) ·
 Fließtext 16/25 px · **Tabelle** (schwarzer Kopf, Zebra `--bw-grau-50`, ein
 gelber Wert) · **✓-Liste** (gelber Kreis, in Outlook Quadrat) · **Hinweis**
 (`--bw-grau-50`, 4 px schwarzer Balken links) · **Karten halbiert** (1 px
-`--bw-linie`) · **schwarze Fläche** mit gelbem Eyebrow, Störer rund, gelbem
-Button · Schluss/Gruß · **Kontaktkasten** · **Fuß** schwarz mit Negativ-Logo,
+`--bw-linie`) · **schwarze Fläche** mit gelbem Eyebrow, Störer rund, gelber
+Button nur, wenn es etwas anzumelden gibt · Schluss/Gruß · **Kontaktkasten** · **Fuß** schwarz mit Negativ-Logo,
 Impressum · Datenschutz · Barrierefreiheit · Abmelden.
 
 ## 3.2 Zahlen, Termine, Texte
 - Zahlen in **de-DE** (Tausenderpunkt, Dezimalkomma), geschützte Leerzeichen
   zwischen Zahl und Einheit (`20&#160;Arbeitstage`, `30.&#160;Juni`).
 - Texte: aktive Verben, Sentence-Case, keine Füllwörter; Anrede „Sehr geehrte
-  Ausbilderinnen und Ausbilder, sehr geehrte Damen und Herren“.
+  Ausbilderinnen und Ausbilder, sehr geehrte Damen und Herren“. Nichts
+  ankündigen, was noch nicht feststeht (Termine ohne Programm sind ein
+  Save the Date, keine Einladung).
 - **Rechtsaussagen** (Urlaub, Vergütung, Fristen) kommen vom Fachbereich und
   werden im Wortlaut übernommen — umstrukturieren ja (Tabelle, Liste), Inhalt
   ändern nein (siehe `AGENTS.md`, Stop-Bedingungen).

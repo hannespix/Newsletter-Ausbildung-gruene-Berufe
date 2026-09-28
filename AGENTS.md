@@ -79,8 +79,9 @@ Vor „fertig“ prüft `@claude` selbst und hakt im PR-Text ab:
       breit und schmal geprüft; Nur-Text-Fassung lesbar.
 - [ ] **Barrierefrei:** `lang`, `role="presentation"`, `alt`-Texte,
       Überschriftenhierarchie, Kontrast ≥ 4,5:1.
-- [ ] **Texte:** Deutsch, aktive Verben, Sentence-Case, Zahlen de-DE;
-      Rechtsaussagen unverändert aus dem Issue bzw. den Leitfäden übernommen.
+- [ ] **Texte:** Deutsch, aktive Verben, Sentence-Case, Zahlen de-DE; in der
+      Mail „Ausbilder-Info“, nie „Newsletter“; Rechtsaussagen unverändert aus
+      dem Issue bzw. den Leitfäden übernommen.
 - [ ] Offene Platzhalter im PR benannt; Anhänge benannt.
 - [ ] Kurzer, klarer PR-Text: Was, Warum, Wie getestet. Bezug `Closes #<Nr>`.
 - [ ] Keine Geheimnisse, keine Empfänger- oder personenbezogenen Echtdaten.
