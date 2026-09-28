@@ -12,7 +12,7 @@ Was passiert:
      mitgeschickt. Fehlt das Logo, steht eine reine Wortmarke an seiner Stelle
      (das Logo wird nie nachgebaut).
   3. Textfassung: aus dem HTML entsteht die Nur-Text-Alternative der E-Mail.
-  4. Anhänge: alle Dateien in anhang/ (außer README.md) hängen an der E-Mail.
+  4. Anhänge: merkblatt/*.pdf und alle Dateien in anhang/ (außer README.md) hängen an der E-Mail.
   5. Prüfung: offene Platzhalter in eckigen Klammern werden gemeldet.
 
 Ausgabe (dist/):
@@ -407,6 +407,10 @@ def main() -> int:
     anhaenge = sorted(p for p in anhang_dir.iterdir()
                       if p.is_file() and p.name.lower() != "readme.md" and not p.name.startswith(".")) \
         if anhang_dir.exists() else []
+    # Merkblätter aus dem Repo (merkblatt/*.pdf) hängen immer an – sie gehören zur Ausgabe.
+    merkblatt_dir = ROOT / "merkblatt"
+    if merkblatt_dir.exists():
+        anhaenge = sorted(merkblatt_dir.glob("*.pdf")) + anhaenge
 
     # 6) Schreiben
     out.mkdir(parents=True, exist_ok=True)
@@ -431,8 +435,8 @@ def main() -> int:
     bild_kb = sum(len(b.daten) for b in bilder) / 1024
     if bild_kb > 1024:
         hinweise.append(f"Eingebettete Bilder: {bild_kb:.0f} KB – Fotos kleiner zuschneiden oder stärker komprimieren.")
-    if not anhaenge:
-        hinweise.append("Keine Anhänge in anhang/ – Leitfaden-PDFs dort ablegen, falls sie mitgeschickt werden sollen.")
+    if not any(a.parent.name == "anhang" for a in anhaenge):
+        hinweise.append("Keine Dateien in anhang/ – Leitfaden- und Azubi-Info-PDF dort ablegen, damit sie mitgeschickt werden.")
     if hinweise:
         print("\nHinweise:")
         for h in hinweise:

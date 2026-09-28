@@ -2,7 +2,9 @@
 
 Steuert, **wie** dieser Newsletter gebaut wird (Design + Technik). Den
 **Prozess** (Loop, PRs, Ausgaben) regelt `AGENTS.md`. Vor jeder Aufgabe beide
-lesen. Ziel: der Newsletter sieht **wie aus einem Guss** mit den Browsertools
+lesen. **Zielgruppe sind alle Ausbildungsbetriebe der Grünen Berufe im
+Regierungsbezirk Freiburg** (Landwirtschaft, Weinbau, Gartenbau, Fischerei und
+weitere) – Formulierungen nie nur auf den Gartenbau beziehen. Ziel: der Newsletter sieht **wie aus einem Guss** mit den Browsertools
 des RPF aus — aktuelles Landes-CD Baden-Württemberg (https://design.landbw.de)
 — und kommt in jedem gängigen E-Mail-Programm sauber an.
 
@@ -26,6 +28,9 @@ newsletter.html              ← die aktuelle Ausgabe (Quelle, nur --bw-* Tokens
 bw-theme.css                 ← Design-System, Single Source of Truth
 assets/logo/                 ← RPF-Logo (rpf-logo.png, -negativ.png) — lizenzpflichtig
 assets/fotos/                ← Fotos (JPEG, vorab auf Zellmaß zugeschnitten, mit Nutzungsrechten)
+assets/fonts/                ← BaWue Sans/Serif — nur für Merkblatt-PDFs, nie in der Mail
+merkblatt/                   ← Merkblätter (HTML im Landesdesign + gedrucktes PDF, hängt an)
+tools/build_merkblatt.js     ← druckt merkblatt/*.html als getaggtes A4-PDF (Chromium)
 anhang/                      ← Anhänge der E-Mail (nicht versioniert)
 tools/build_newsletter.py    ← Build: Tokens, Logo (Content-ID), .eml/.html/.txt
 tools/check_offline.py       ← findet externe Lade-Referenzen (CI-Gate)
@@ -65,6 +70,11 @@ Tracking):
   `--streng` bricht ab. Nie mit Platzhaltern versenden.
 - **Nur-Text-Alternative** erzeugt der Build aus dem HTML — Struktur so halten,
   dass die Textfassung lesbar bleibt (Überschriften, Absätze, Tabellenzeilen).
+- **Lange Inhalte:** Kurzfassung in der Mail, vollständige Fassung als
+  Merkblatt-PDF im Landesdesign (`merkblatt/`) mit Dokument-Karte in der Mail.
+  Keine Akkordeons oder aufklappbaren Bereiche (kein Client-Support, versteckter
+  Text ist ein Spam-Signal), kein Text in Bildern. „Mehr lesen“-Links nur auf
+  veröffentlichte RPF-Seiten.
 - **Betreff** = `<title>`; **Vorschautext** = verborgener Preheader am Anfang.
 - **Bezeichnung in der Mail:** „Ausbilder-Info“, nie „Newsletter“, keine
   Ausgabennummern – es soll keine Erwartung regelmäßiger Post entstehen.
@@ -141,12 +151,13 @@ in jeder Mail; Schriftgröße ≥ 12 px, Fließtext 16 px.
 - RPF-Logo aus `assets/logo/` (nicht nachbauen/einfärben/verzerren). Kopf:
   `rpf-logo.png`; schwarzer Fuß: `rpf-logo-negativ.png`. Fehlt das Logo, setzt
   der Build eine reine Wortmarke ein.
-- Logo und Schriften sind geschützt (`assets/logo/LIZENZ.md`). **Repository
-  privat halten.** Schriftdateien liegen nicht im Repo und gehören nicht in die
-  Mail.
+- Logo und Schriften sind geschützt (`LIZENZ.md` in `assets/logo/` und
+  `assets/fonts/`). **Repository privat halten.** Die Schriften werden nur in
+  die Merkblatt-PDFs eingebettet und gehören nie in die Mail.
 - Keine Empfängerdaten, keine Verteiler, keine personenbezogenen Echtdaten
   ins Repo. Kontaktangaben nur dienstlich (Funktionspostfach, Durchwahl der
-  Ausbildungsberatung wie im Leitfaden).
+  Ausbildungsberatung wie im Leitfaden); Absender ist immer die
+  Ausbildungsberatung Grüne Berufe insgesamt, nicht ein einzelner Fachbereich.
 
 ---
 

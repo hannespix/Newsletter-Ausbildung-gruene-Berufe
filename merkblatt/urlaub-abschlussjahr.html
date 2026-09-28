@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Urlaub im letzten Ausbildungsjahr – Merkblatt der Ausbildungsberatung Grüne Berufe, Regierungspräsidium Freiburg</title>
+<meta name="description" content="Merkblatt für Ausbildungsbetriebe der Grünen Berufe: Urlaubsanspruch im Abschlussjahr, maßgebliche Urlaubszahlen, praktische Planung. Stand September 2026.">
+<meta name="author" content="Regierungspräsidium Freiburg, Referat 31 – Ausbildungsberatung Grüne Berufe">
+<!--
+  Merkblatt zum Newsletter-Abschnitt „Urlaub im Abschlussjahr frühzeitig planen“.
+  Text: Ausbildungsberatung Grüne Berufe (Fachbereich). Layout: Landes-CD über bw-theme.css.
+  PDF erzeugen: node tools/build_merkblatt.js  →  merkblatt/Merkblatt-Urlaub-letztes-Ausbildungsjahr.pdf
+-->
+<link rel="stylesheet" href="../bw-theme.css">
+<style>
+  @page { size: A4; margin: 18mm 18mm 20mm 18mm; }
+  html { font-size: 10.5pt; }
+  body { background: var(--bw-weiss); color: var(--bw-text); font-family: var(--bw-font-sans); line-height: 1.45; margin: 0; hyphens: auto; }
+  .blatt { max-width: 174mm; margin: 0 auto; padding: 10mm 0; }
+  @media screen { body { background: var(--bw-grau-50); } .blatt { background: var(--bw-weiss); padding: 18mm; max-width: 210mm; box-sizing: border-box; } }
+  @media print { .blatt { padding: 0; } }
+
+  .kopf { display: flex; justify-content: space-between; align-items: flex-start; gap: 8mm; border-bottom: 2pt solid var(--bw-gelb); padding-bottom: 4mm; margin-bottom: 7mm; }
+  .kopf img { height: 11mm; width: auto; display: block; }
+  .kopf .eyebrow { font-size: 8.5pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--bw-text-leise); text-align: right; line-height: 1.4; margin: 1mm 0 0; }
+
+  h1 { font-family: var(--bw-font-serif); font-size: 24pt; line-height: 1.1; margin: 0 0 3mm; }
+  .unterzeile { font-size: 12pt; font-weight: 600; line-height: 1.4; margin: 0 0 6mm; }
+  h2 { font-family: var(--bw-font-serif); font-size: 14pt; line-height: 1.2; margin: 6mm 0 2.5mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; max-width: none; }
+  p.vor-tabelle { break-after: avoid; }
+
+  table.tab { width: 100%; border-collapse: collapse; font-size: 9.5pt; line-height: 1.4; margin: 2mm 0 3mm; hyphens: none; }
+  table.tab th { background: var(--bw-schwarz); color: var(--bw-weiss); text-align: left; padding: 2.2mm 2.5mm; font-weight: 700; }
+  table.tab td { padding: 2.2mm 2.5mm; border-bottom: 1px solid var(--bw-linie); vertical-align: top; }
+  table.tab td:first-child { font-weight: 700; width: 36%; }
+  table.tab tbody tr:nth-child(even) td { background: var(--bw-grau-50); }
+  table.tab tr { break-inside: avoid; }
+  table.tab .zahl { font-weight: 700; white-space: nowrap; }
+  table.tab .hervor { background: var(--bw-gelb); }
+
+  ul.haken { list-style: none; margin: 0 0 3mm; padding: 0; }
+  ul.haken > li { position: relative; padding-left: 8mm; margin-bottom: 2.6mm; break-inside: avoid; }
+  ul.haken > li::before { content: "✓"; position: absolute; left: 0; top: 0.3mm; width: 5.2mm; height: 5.2mm; border-radius: 50%; background: var(--bw-gelb); color: var(--bw-schwarz); font-size: 8.5pt; line-height: 5.2mm; text-align: center; }
+
+  .hinweis { background: var(--bw-grau-50); border-left: 4px solid var(--bw-schwarz); padding: 3.2mm 4.5mm; margin: 4mm 0; break-inside: avoid; }
+  .hinweis p:last-child { margin-bottom: 0; }
+
+  .fuss { margin-top: 9mm; padding-top: 3mm; border-top: 1px solid var(--bw-linie); font-size: 8pt; line-height: 1.45; color: var(--bw-text-leise); }
+  .fuss p { margin: 0 0 1.2mm; }
+</style>
+</head>
+<body>
+<article class="blatt">
+  <header class="kopf">
+    <img src="../assets/logo/rpf-logo.png" alt="Baden-Württemberg – Regierungspräsidium Freiburg">
+    <p class="eyebrow">Merkblatt<br>Ausbildungsberatung Grüne Berufe<br>Stand September 2026</p>
+  </header>
+
+  <h1>Urlaub im letzten Ausbildungsjahr.</h1>
+  <p class="unterzeile">Was beim Ausbildungsende nach dem 30. Juni gilt und wie Sie den Urlaub im Betrieb praktisch planen.</p>
+
+  <p>Für eine einheitliche Handhabung beim Urlaub möchten wir die Urlaubsregelungen im Abschluss-Ausbildungsjahr erläutern.</p>
+
+  <h2>Rechtsgrundlage: keine Zwölftelung nach dem 30. Juni.</h2>
+  <p>Grundlage ist § 5 Abs. 1 Buchst. c BUrlG: Eine Zwölftelung des Urlaubs findet nicht statt, wenn das Arbeits- bzw. Ausbildungsverhältnis nach dem 30. Juni endet. Dann besteht Anspruch auf den vollen gesetzlichen Jahresurlaub.</p>
+  <p>Endet ein Ausbildungsverhältnis – beispielsweise durch das Bestehen der Abschlussprüfung – in der zweiten Jahreshälfte (ab dem 1. Juli) und wurde die Wartezeit erfüllt, hat der Auszubildende Anspruch auf den vollen <strong>gesetzlichen</strong> Mindestjahresurlaub. Dies gilt auch dann, wenn das Ausbildungsverhältnis nicht bis zum 31. Dezember besteht. Der Urlaub darf wegen des Ausbildungsendes im Sommer nicht anteilig gekürzt werden. Für Volljährige sind das 20 Arbeitstage bei einer Fünftagewoche, 24 Werktage bei einer Sechstagewoche. Höhere tarifliche oder vertragliche Ansprüche sind zusätzlich zu beachten.</p>
+  <p>Nach § 4 BUrlG entsteht der Anspruch auf den vollen gesetzlichen Jahresurlaub erstmals nach sechsmonatigem Bestehen (Wartezeit) des Arbeitsverhältnisses. Mit der „Wartezeit“ ist im Urlaubsrecht eine Frist von sechs Monaten gemeint.</p>
+  <p>Die gesetzlichen Vorgaben und die geltenden Tarifverträge geben den Urlaubsanspruch klar vor. Deshalb passen wir unsere Eintragungspraxis entsprechend an.</p>
+
+  <h2>Welche Urlaubszahlen sind maßgeblich?</h2>
+  <p class="vor-tabelle">Die folgenden Angaben beziehen sich auf eine Fünftagewoche:</p>
+  <table class="tab">
+    <thead>
+      <tr><th scope="col">Ausbildungsbetrieb</th><th scope="col">Urlaubsanspruch</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Betriebe im Geltungsbereich des GaLaBau-Bundesrahmentarifvertrags</td>
+        <td>Beim regulären Ausbildungsende nach dem 30. Juni sind <span class="zahl hervor">30 Arbeitstage</span> einzutragen. Der allgemeinverbindliche Tarifvertrag sieht hierfür nach erfüllter Wartezeit keine anteilige Kürzung vor. Ohne höheren Tarifvertrag beträgt das gesetzliche Minimum 20 Arbeitstage bzw. 24 Werktage.</td>
+      </tr>
+      <tr>
+        <td>Erwerbsgartenbau: Baumschule, Friedhofsgärtnerei, Gemüsebau, Obstbau, Staudengärtnerei und Zierpflanzenbau</td>
+        <td>Für Volljährige gelten bei Anwendung des Tarifs <span class="zahl">24 Arbeitstage</span> Jahresurlaub. Ohne höheren Tarifvertrag beträgt das gesetzliche Minimum 20 Arbeitstage bzw. 24 Werktage. Für die Behandlung des zusätzlichen Urlaubs im Abschlussjahr ist die konkret geltende Tarif- oder Vertragsregelung zu prüfen.</td>
+      </tr>
+      <tr>
+        <td>Kommunale, staatliche oder kirchliche Ausbildungsbetriebe</td>
+        <td>Hier gelten die jeweiligen Ausbildungstarifverträge oder Arbeitsvertragsregelungen. Die Fachrichtung allein entscheidet nicht über den Urlaubsanspruch.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Für Minderjährige gelten höhere gesetzliche Mindestansprüche. Bei Vereinbarung ganzer Urlaubstage sind dies bei einer Fünftagewoche 25 Tage unter 16 Jahren, 23 Tage mit 16 Jahren und 21 Tage mit 17 Jahren. Maßgeblich ist das Alter am 1. Januar. Höhere tarifliche Ansprüche, insbesondere die 30 Tage im GaLaBau, gehen vor.</p>
+
+  <h2>Wie lässt sich der Urlaub praktisch planen?</h2>
+  <ul class="haken">
+    <li><strong>Unmittelbare Übernahme beim selben Arbeitgeber:</strong> Verbleibender Urlaub kann nach Absprache auch nach der Abschlussprüfung genommen werden, beispielsweise während der Betriebsferien im Dezember. Er muss daher nicht vollständig vor der Prüfung liegen. Der Urlaub aus der Ausbildungszeit wird in diesem Fall nicht ausgezahlt. Der Grund: Für den Urlaub werden das Ausbildungsverhältnis und das anschließende Arbeitsverhältnis grundsätzlich als einheitliches Beschäftigungsverhältnis betrachtet. Der offene Urlaub aus der Ausbildungszeit bleibt also bestehen und kann nach der Übernahme genommen werden.</li>
+    <li><strong>Ausscheiden oder Betriebswechsel nach dem 30. Juni:</strong> Offener Urlaub ist grundsätzlich vor dem Ausscheiden zu gewähren. Ist dies wegen der Beendigung nicht mehr möglich, muss er ausgezahlt werden (Abgeltungsanspruch). Zu beachten ist jedoch, dass dies nur für diejenigen Urlaubstage gilt, die dem Auszubildenden aus dem gesetzlichen Anspruch zustehen. Wie es sich bei darüber hinausgehenden vertraglichen Urlaubstagen verhält, ist gegebenenfalls in Ihrem Tarifvertrag geregelt und zu prüfen. Resturlaub geht nicht automatisch auf den neuen Betrieb über. Der bisherige Arbeitgeber stellt eine Urlaubsbescheinigung aus, damit bereits gewährter oder ausgezahlter gesetzlicher Urlaub beim neuen Arbeitgeber berücksichtigt werden kann (§§ 6–7 BUrlG).</li>
+  </ul>
+
+  <div class="hinweis">
+    <p><strong>Bitte planen Sie frühzeitig:</strong> Bei vorzeitig bestandener Abschlussprüfung endet die Ausbildung bereits mit Bekanntgabe des Ergebnisses durch den Prüfungsausschuss. Urlaub ist grundsätzlich zu nehmen; eine Auszahlung (Abgeltung) kommt erst infrage, wenn das Arbeits- bzw. Ausbildungsverhältnis tatsächlich endet und der Urlaub nicht mehr genommen werden kann.</p>
+  </div>
+
+  <footer class="fuss">
+    <p><strong>Herausgeber:</strong> Regierungspräsidium Freiburg, Referat 31 – Ausbildungsberatung Grüne Berufe · Bertoldstraße 43, 79098 Freiburg im Breisgau · abteilung3@rpf.bwl.de · Stand: September 2026</p>
+    <p><strong>Rechtsgrundlagen:</strong> §§ 4, 5, 6 und 7 Bundesurlaubsgesetz (BUrlG); § 19 Jugendarbeitsschutzgesetz (JArbSchG); Bundesrahmentarifvertrag für den Garten-, Landschafts- und Sportplatzbau; Tarifvertrag Erwerbsgartenbau Baden-Württemberg. Dieses Merkblatt ersetzt keine rechtliche Prüfung im Einzelfall – bei Fragen berät Sie die Ausbildungsberatung.</p>
+  </footer>
+</article>
+</body>
+</html>

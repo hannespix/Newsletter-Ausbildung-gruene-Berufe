@@ -1,14 +1,16 @@
 # Ausbilder-Info „Grüne Berufe“ — HTML-E-Mail im Landesdesign
 
 E-Mail-Information der **Ausbildungsberatung Grüne Berufe** (Regierungspräsidium
-Freiburg, Referat 31) an die Ausbildungsbetriebe – als HTML-E-Mail im
+Freiburg, Referat 31) an **alle Ausbildungsbetriebe der Grünen Berufe im
+Regierungsbezirk** – Landwirtschaft, Weinbau, Gartenbau, Fischerei und die
+weiteren grünen Ausbildungsberufe – als HTML-E-Mail im
 Corporate Design des Landes Baden-Württemberg (https://design.landbw.de),
 gebaut auf der gemeinsamen Vorlage `Vorlage-Tool-im-Landesdesign`. Inhalte und
 Anhänge kommen aus dem Repo `Rechte-und-Pflichten-von-Azubis`.
 
 **Aktuelle Ausgabe:** September 2026 – Start des Ausbildungsjahres (Urlaub im
-Abschlussjahr, Leitfaden „Rechte und Pflichten“, Save the Date zum Ausbildertag
-on tour 2027 im Layout des Flyers).
+Abschlussjahr mit Merkblatt, Leitfaden „Rechte und Pflichten“, Save the Date
+zum Ausbildertag on tour 2027 im Layout des Flyers).
 
 > In der Mail heißt es bewusst **„Ausbilder-Info“**, nicht „Newsletter“, und es
 > gibt keine Ausgabennummer: Es soll keine Erwartung regelmäßiger Post entstehen.
@@ -27,8 +29,9 @@ on tour 2027 im Layout des Flyers).
    eckigen Klammern meldet der Build. Programm, Anmeldeweg und ein
    Anmelde-Button kommen mit der eigentlichen Einladung (siehe `ROADMAP.md`).
 2. **Anhänge ablegen.** Die PDFs aus `Rechte-und-Pflichten-von-Azubis/pdf/` nach
-   `anhang/` kopieren (Leitfaden für Betriebe, Azubi-Info). Alles in `anhang/`
-   hängt automatisch an der E-Mail – Details in [`anhang/README.md`](anhang/README.md).
+   `anhang/` kopieren (Leitfaden „Grüne Berufe“ für Betriebe, Azubi-Info). Alles
+   in `anhang/` hängt automatisch an der E-Mail, ebenso die Merkblätter aus
+   `merkblatt/` – Details in [`anhang/README.md`](anhang/README.md).
 3. **Bauen.**
    ```bash
    python3 tools/build_newsletter.py
@@ -85,7 +88,7 @@ durch die Bild-URLs des Systems ersetzen. Die Nur-Text-Fassung liegt in
 | Gelbe Titelfläche „Ausbilder-Info …“, Serif-Überschrift mit Punkt | BaWü Gelb als Fläche, Text darauf schwarz |
 | Inhaltsübersicht mit gelben Nummern | Karte (`.bw-card`-Optik) |
 | Kapitelköpfe: gelbes Nummernquadrat, Serif-Titel, gelbe Linie | wie im Leitfaden „Klar handeln in der Ausbildung“ |
-| Tabelle Urlaubsanspruch mit **einem** gelb hervorgehobenen Wert | Infografik-Regel: Gelb nur für einen Wert |
+| Tabelle Urlaubsanspruch mit **einem** gelb hervorgehobenen Wert, Dokument-Karte zum Merkblatt | Infografik-Regel: Gelb nur für einen Wert |
 | ✓-Liste, Hinweiskasten (grau, schwarzer Balken) | `.bw-hinweis` |
 | Zwei Dokument-Karten (halbiert) | `.bw-flaechen.bw-halb` |
 | Save-the-Date-Block im Flyer-Layout: 2×2-Fotoraster, schwarzes Band mit Serif-Titel, drei gelben Terminen und rundem Störer (Button erst mit der Einladung) | `.bw-flaeche--schwarz`, `.bw-stoerer` |
@@ -103,6 +106,27 @@ Sonst gelten die Fallbacks Georgia (Überschriften) und Arial/Systemschrift
 eingebetteten Fonts, und die Web-Lizenz erlaubt keine Weitergabe an Empfänger.
 
 ---
+
+## Lange Inhalte: Kurzfassung in der Mail, Merkblatt im Anhang
+
+Ausführliche Erläuterungen (etwa der Urlaubsanspruch im Abschlussjahr) stehen
+nicht komplett in der Mail. Bewährt hat sich: **das Wichtigste kompakt in der
+Mail, die vollständige Fassung als Merkblatt-PDF im Landesdesign im Anhang.**
+Das bleibt kurz, barrierefrei, druck- und ablagefähig und ist unauffällig für
+Spamfilter. Nicht geeignet sind Akkordeons oder aufklappbare Bereiche (Outlook
+und Gmail unterstützen sie nicht, versteckter Text gilt als Spam-Signal) und
+Bilder mit Text. Ein „Mehr lesen“-Link ist nur sinnvoll, wenn der Text auf
+einer Seite des RPF veröffentlicht ist.
+
+Merkblätter liegen als HTML unter `merkblatt/` (Landesdesign über
+`bw-theme.css`, Text vom Fachbereich) und werden mit Chromium als getaggtes
+A4-PDF gedruckt – mit den Landesschriften aus `assets/fonts/`:
+```bash
+npm i -g playwright && npx playwright install chromium   # einmalig
+node tools/build_merkblatt.js                            # -> merkblatt/*.pdf
+```
+Das fertige PDF wird mitversioniert, damit der Newsletter-Build es ohne
+Node/Playwright anhängen kann.
 
 ## Technik: Regeln für HTML-E-Mails (Kurzfassung, Details in `CLAUDE.md`)
 
@@ -127,6 +151,9 @@ newsletter.html              die aktuelle Ausgabe (Quelle mit --bw-* Tokens)
 bw-theme.css                 Design-System, Single Source of Truth (aus der Vorlage)
 assets/logo/                 RPF-Logo positiv/negativ — lizenzpflichtig, Repo privat
 assets/fotos/                Fotos des Save-the-Date-Flyers, auf 600×432 px zugeschnitten (JPEG)
+assets/fonts/                BaWue Sans/Serif (woff2/woff) — nur für Merkblatt-PDFs, lizenzpflichtig
+merkblatt/                   Merkblätter: HTML-Quelle im Landesdesign + gedrucktes PDF
+tools/build_merkblatt.js     druckt merkblatt/*.html als getaggtes A4-PDF (Chromium)
 anhang/                      Anhänge der E-Mail (nicht versioniert)
 tools/build_newsletter.py    Build: Tokens auflösen, Logo einbetten, .eml/.html/.txt
 tools/check_offline.py       Offline-/CDN-Prüfung (CI-Gate)
@@ -140,9 +167,11 @@ CLAUDE.md AGENTS.md ROADMAP.md
 
 ## Recht & Lizenz
 
-- **Repository privat halten.** Das RPF-Logo in `assets/logo/` ist geschützt
-  (`assets/logo/LIZENZ.md`). Wird das Repo je öffentlich, Logo ausschließen und
-  aus der Historie entfernen – der Build setzt dann eine Wortmarke ein.
+- **Repository privat halten.** Das RPF-Logo in `assets/logo/` und die
+  Schriften in `assets/fonts/` sind geschützt (`LIZENZ.md` in beiden Ordnern).
+  Wird das Repo je öffentlich, beides ausschließen und aus der Historie
+  entfernen – der Build setzt dann eine Wortmarke ein. Die Schriften werden nur
+  in die Merkblatt-PDFs eingebettet, nie in die E-Mail.
 - Die Leitfaden-PDFs enthalten lizenzierte Schriften und Bildmaterial; sie
   bleiben im Repo `Rechte-und-Pflichten-von-Azubis` und werden nur lokal nach
   `anhang/` kopiert.

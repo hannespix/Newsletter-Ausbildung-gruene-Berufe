@@ -13,7 +13,8 @@ damit `newsletter.html` für die nächste Ausgabe frei ist.
 ---
 
 ## A1 — September 2026: Start des Ausbildungsjahres
-**Inhalt:** Urlaub im Abschlussjahr · Leitfaden „Rechte und Pflichten“ (Anhang) ·
+**Inhalt:** Urlaub im Abschlussjahr (Kurzfassung + Merkblatt-PDF) · Leitfaden
+„Rechte und Pflichten“, Fassung Grüne Berufe (Anhang) ·
 Save the Date „Ausbildertag on tour 2027“ mit den drei Terminen aus dem Flyer
 (21.01., 26.01., 28.01.2027), noch keine Anmeldung.
 **Done:** Build läuft ohne Fehler, Offline-Check grün, keine Platzhalter,
