@@ -7,7 +7,8 @@ gebaut auf der gemeinsamen Vorlage `Vorlage-Tool-im-Landesdesign`. Inhalte und
 Anhänge kommen aus dem Repo `Rechte-und-Pflichten-von-Azubis`.
 
 **Aktuelle Ausgabe:** September 2026 – Start des Ausbildungsjahres (Urlaub im
-Abschlussjahr, Leitfaden „Rechte und Pflichten“, Save the Date zum Ausbildertag).
+Abschlussjahr, Leitfaden „Rechte und Pflichten“, Save the Date zum Ausbildertag
+on tour 2027 im Layout des Flyers).
 
 > In der Mail heißt es bewusst **„Ausbilder-Info“**, nicht „Newsletter“, und es
 > gibt keine Ausgabennummer: Es soll keine Erwartung regelmäßiger Post entstehen.
@@ -21,11 +22,10 @@ Abschlussjahr, Leitfaden „Rechte und Pflichten“, Save the Date zum Ausbilder
 
 ## In fünf Schritten zum Versand
 
-1. **Platzhalter füllen.** In `newsletter.html` alle Stellen in eckigen Klammern
-   ersetzen: `[Datum]` und `[Veranstaltungsort]` des Ausbildertags. Der Build
-   listet offene Platzhalter auf. Abschnitt 3 ist bewusst nur ein Save the Date;
-   Programm, Anmeldeweg und ein Anmelde-Button kommen mit der eigentlichen
-   Einladung (siehe `ROADMAP.md`).
+1. **Inhalt prüfen.** Die drei Termine des Ausbildertags on tour 2027 stehen in
+   Abschnitt 3 (aus dem Save-the-Date-Flyer übernommen). Neue Platzhalter in
+   eckigen Klammern meldet der Build. Programm, Anmeldeweg und ein
+   Anmelde-Button kommen mit der eigentlichen Einladung (siehe `ROADMAP.md`).
 2. **Anhänge ablegen.** Die PDFs aus `Rechte-und-Pflichten-von-Azubis/pdf/` nach
    `anhang/` kopieren (Leitfaden für Betriebe, Azubi-Info). Alles in `anhang/`
    hängt automatisch an der E-Mail – Details in [`anhang/README.md`](anhang/README.md).
@@ -88,7 +88,7 @@ durch die Bild-URLs des Systems ersetzen. Die Nur-Text-Fassung liegt in
 | Tabelle Urlaubsanspruch mit **einem** gelb hervorgehobenen Wert | Infografik-Regel: Gelb nur für einen Wert |
 | ✓-Liste, Hinweiskasten (grau, schwarzer Balken) | `.bw-hinweis` |
 | Zwei Dokument-Karten (halbiert) | `.bw-flaechen.bw-halb` |
-| Schwarze Save-the-Date-Fläche mit rundem Störer (Button erst mit der Einladung) | `.bw-flaeche--schwarz`, `.bw-stoerer`, `.bw-btn--gelb` |
+| Save-the-Date-Block im Flyer-Layout: 2×2-Fotoraster, schwarzes Band mit Serif-Titel, drei gelben Terminen und rundem Störer (Button erst mit der Einladung) | `.bw-flaeche--schwarz`, `.bw-stoerer` |
 | Kontaktkasten, schwarzer Fuß mit Negativ-Logo, Impressum/Datenschutz/Abmelden | `.bw-footer` |
 
 Farben und Schriften stehen in `newsletter.html` ausschließlich als
@@ -126,6 +126,7 @@ eingebetteten Fonts, und die Web-Lizenz erlaubt keine Weitergabe an Empfänger.
 newsletter.html              die aktuelle Ausgabe (Quelle mit --bw-* Tokens)
 bw-theme.css                 Design-System, Single Source of Truth (aus der Vorlage)
 assets/logo/                 RPF-Logo positiv/negativ — lizenzpflichtig, Repo privat
+assets/fotos/                Fotos des Save-the-Date-Flyers, auf 600×432 px zugeschnitten (JPEG)
 anhang/                      Anhänge der E-Mail (nicht versioniert)
 tools/build_newsletter.py    Build: Tokens auflösen, Logo einbetten, .eml/.html/.txt
 tools/check_offline.py       Offline-/CDN-Prüfung (CI-Gate)
@@ -145,6 +146,9 @@ CLAUDE.md AGENTS.md ROADMAP.md
 - Die Leitfaden-PDFs enthalten lizenzierte Schriften und Bildmaterial; sie
   bleiben im Repo `Rechte-und-Pflichten-von-Azubis` und werden nur lokal nach
   `anhang/` kopiert.
+- **Fotos** (`assets/fotos/`) stammen aus dem Save-the-Date-Flyer des RPF; nur
+  Bilder verwenden, deren Nutzungsrechte beim RP Freiburg liegen. Bildnachweise
+  gehören unter das Raster oder in den Fuß.
 - **Keine Empfängerdaten ins Repo.** Verteiler werden außerhalb gepflegt
   (Outlook-Kontaktgruppe, Fachverfahren). Versand immer per Bcc.
 - Rechtsaussagen (z. B. Urlaubsansprüche) stammen vom Fachbereich und werden

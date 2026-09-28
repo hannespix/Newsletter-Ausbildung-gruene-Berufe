@@ -14,14 +14,16 @@ damit `newsletter.html` für die nächste Ausgabe frei ist.
 
 ## A1 — September 2026: Start des Ausbildungsjahres
 **Inhalt:** Urlaub im Abschlussjahr · Leitfaden „Rechte und Pflichten“ (Anhang) ·
-Save the Date zum Ausbildertag (nur Termin und Ort, noch keine Anmeldung).
-**Done:** Build läuft ohne Fehler, Offline-Check grün, Termin und Ort
-eingetragen, Testmail in Outlook und an eine externe Adresse geprüft, Anhänge
-dabei. **Status:** Gerüst und Inhalt stehen, Termin und Ort offen.
+Save the Date „Ausbildertag on tour 2027“ mit den drei Terminen aus dem Flyer
+(21.01., 26.01., 28.01.2027), noch keine Anmeldung.
+**Done:** Build läuft ohne Fehler, Offline-Check grün, keine Platzhalter,
+Testmail in Outlook und an eine externe Adresse geprüft, Anhänge dabei.
+**Status:** Inhalt vollständig, Versand nach Testmail möglich.
 
 ## A2 — Einladung zum Ausbildertag
 **Inhalt:** Programm, Anmeldeweg und Frist, Anmelde-Button (Baustein liegt in
 der Git-Historie von A1: gelber Button mit `mailto:`, alternativ Formular-Link).
+Laut Flyer folgt die offizielle Einladung mit Anmeldelink im November 2026.
 **Done:** eigene Aussendung, sobald Programm und Anmeldung feststehen.
 
 ## Ideen für weitere Ausgaben

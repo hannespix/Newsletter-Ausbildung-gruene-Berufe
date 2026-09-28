@@ -154,6 +154,8 @@ def bilder_verarbeiten(html: str, tokens: dict, hinweise: list):
             continue
         pfad = (ROOT / src).resolve()
         if not pfad.exists():
+            if not src.startswith("assets/logo/"):
+                sys.exit(f"FEHLER: Bild fehlt: {src} – Datei nach assets/ legen oder das <img> entfernen.")
             ersatz = wortmarke(tokens, negativ="negativ" in pfad.name.lower())
             hinweise.append(f"Bild fehlt: {src} → Wortmarke eingesetzt (Logo aus der Vorlage nach assets/logo/ kopieren)")
             vorschau_teile.append(ersatz)
@@ -418,13 +420,17 @@ def main() -> int:
     print(f"Absender: {args.absender}")
     print(f"OK  -> {out / 'newsletter.html'}  ({kb('newsletter.html'):.0f} KB)  Vorschau im Browser")
     print(f"OK  -> {out / 'newsletter.eml'}   ({kb('newsletter.eml'):.0f} KB)  "
-          f"{len(bilder)} Bild(er) eingebettet, {len(anhaenge)} Anhang/Anhänge")
+          f"{len(bilder)} Bild(er) eingebettet ({sum(len(b.daten) for b in bilder) / 1024:.0f} KB), "
+          f"{len(anhaenge)} Anhang/Anhänge")
     for a in anhaenge:
         print(f"         + {a.name} ({a.stat().st_size / 1024:.0f} KB)")
     print(f"OK  -> {out / 'newsletter.txt'}   Nur-Text-Fassung")
     mail_kb = len(html_mail.encode("utf-8")) / 1024
     if mail_kb > GMAIL_GRENZE_KB:
         hinweise.append(f"HTML der E-Mail ist {mail_kb:.0f} KB – Gmail kürzt Nachrichten über ~102 KB.")
+    bild_kb = sum(len(b.daten) for b in bilder) / 1024
+    if bild_kb > 1024:
+        hinweise.append(f"Eingebettete Bilder: {bild_kb:.0f} KB – Fotos kleiner zuschneiden oder stärker komprimieren.")
     if not anhaenge:
         hinweise.append("Keine Anhänge in anhang/ – Leitfaden-PDFs dort ablegen, falls sie mitgeschickt werden sollen.")
     if hinweise:

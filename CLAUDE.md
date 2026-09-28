@@ -25,6 +25,7 @@ Theme, nicht im Newsletter.
 newsletter.html              ← die aktuelle Ausgabe (Quelle, nur --bw-* Tokens)
 bw-theme.css                 ← Design-System, Single Source of Truth
 assets/logo/                 ← RPF-Logo (rpf-logo.png, -negativ.png) — lizenzpflichtig
+assets/fotos/                ← Fotos (JPEG, vorab auf Zellmaß zugeschnitten, mit Nutzungsrechten)
 anhang/                      ← Anhänge der E-Mail (nicht versioniert)
 tools/build_newsletter.py    ← Build: Tokens, Logo (Content-ID), .eml/.html/.txt
 tools/check_offline.py       ← findet externe Lade-Referenzen (CI-Gate)
@@ -41,6 +42,7 @@ Tracking):
   funktionieren in E-Mails ohnehin nicht und haben nichts darin zu suchen.
 - **Bilder liegen in `assets/`** und werden vom Build eingebettet: als
   Content-ID-Anhang in der `.eml`, als `data:`-URL in der Browser-Vorschau.
+  Fotos als JPEG (kein WebP), zusammen unter 1 MB; der Build warnt darüber.
 - **Links** (`<a href="https://…">`) sind erlaubt — auf Seiten des Landes/RPF
   oder `mailto:`. Keine Kurzlinks, keine Tracking-Parameter.
 - **Prüfung:** `python3 tools/check_offline.py` (läuft im CI bei jedem PR).
@@ -94,8 +96,12 @@ Quadrat mit Serif-Nummer, Serif-Titel, 2 px gelbe Linie — wie im Leitfaden) ·
 Fließtext 16/25 px · **Tabelle** (schwarzer Kopf, Zebra `--bw-grau-50`, ein
 gelber Wert) · **✓-Liste** (gelber Kreis, in Outlook Quadrat) · **Hinweis**
 (`--bw-grau-50`, 4 px schwarzer Balken links) · **Karten halbiert** (1 px
-`--bw-linie`) · **schwarze Fläche** mit gelbem Eyebrow, Störer rund, gelber
-Button nur, wenn es etwas anzumelden gibt · Schluss/Gruß · **Kontaktkasten** · **Fuß** schwarz mit Negativ-Logo,
+`--bw-linie`) · **Save-the-Date-Block im Flyer-Layout:** 2×2-Fotoraster über
+die volle Breite (JPEG, kein WebP – Outlook zeigt es nicht; jede Zelle vorab
+auf 600×432 px zugeschnitten, weil `object-fit` in Mails nicht greift), darunter
+schwarzes Band mit Serif-Titel, Unterzeile `--bw-grau-200`, Trennlinie
+`--bw-grau-700`, Termine als gelbe Zahlen mit Ort in `--bw-grau-300`, Störer
+rund, gelber Button nur, wenn es etwas anzumelden gibt · Schluss/Gruß · **Kontaktkasten** · **Fuß** schwarz mit Negativ-Logo,
 Impressum · Datenschutz · Barrierefreiheit · Abmelden.
 
 ## 3.2 Zahlen, Termine, Texte
