@@ -17,8 +17,10 @@ damit `newsletter.html` für die nächste Ausgabe frei ist.
 Fischerei und weitere) – je eigene Urlaubstabelle, eigenes Merkblatt, eigene
 Leitfaden-Fassung. Die Leitfäden „Klar handeln in der Ausbildung“ (Gartenbau /
 Grüne Berufe) werden nachgereicht, sobald sie fertig sind.
-**Inhalt:** Urlaub im Abschlussjahr (Kurzfassung + Merkblatt-PDF) · Leitfaden
-„Rechte und Pflichten“, Fassung Grüne Berufe (Anhang) ·
+**Inhalt:** Urlaub im Abschlussjahr (Kurzfassung + Merkblatt-PDF, Text nach der
+juristischen Prüfung vom 1. Oktober 2026 – Mindesturlaub/Mehrurlaub, Zeilen für
+Landwirtschaft/Weinbau und Minderjährige) · Leitfaden „Rechte und Pflichten“,
+Fassung Grüne Berufe (Anhang) ·
 Save the Date „Ausbildertag on tour 2027“ mit den drei Terminen aus dem Flyer
 (21.01., 26.01., 28.01.2027), noch keine Anmeldung.
 **Done:** Build läuft ohne Fehler, Offline-Check grün, keine Platzhalter,

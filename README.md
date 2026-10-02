@@ -132,7 +132,8 @@ Bilder mit Text. Ein „Mehr lesen“-Link ist nur sinnvoll, wenn der Text auf
 einer Seite des RPF veröffentlicht ist.
 
 Merkblätter liegen als HTML unter `merkblatt/` (Landesdesign über
-`bw-theme.css`, Text vom Fachbereich, Variantenblöcke wie im Newsletter) und
+`bw-theme.css`, Text vom Fachbereich nach juristischer Prüfung, Variantenblöcke
+wie im Newsletter) und
 werden je Variante mit Chromium als getaggtes A4-PDF gedruckt – mit den
 Landesschriften aus `assets/fonts/`:
 ```bash
