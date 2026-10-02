@@ -14,8 +14,8 @@ zum Ausbildertag on tour 2027 im Layout des Flyers) – in **zwei Varianten**:
 
 | Variante | Empfänger | Eigenes | Anhänge |
 |----------|-----------|---------|---------|
-| `gaertner` | Ausbildungsbetriebe im Gartenbau | Urlaubstabelle mit GaLaBau und Erwerbsgartenbau, Hinweis zur geänderten Eintragungspraxis, Durchwahl der Gartenbau-Beratung | Merkblatt Gartenbau · `anhang/alle/` · `anhang/gaertner/` (Leitfaden Gartenbau) |
-| `gruene-berufe` | Landwirtschaft, Weinbau, Fischerei und weitere Grüne Berufe | Urlaubstabelle ohne Gartenbau-Tarife (gesetzliches Minimum, tarifgebundene und öffentliche Betriebe), Zentrale als Telefon | Merkblatt Grüne Berufe · `anhang/alle/` · `anhang/gruene-berufe/` (Leitfaden Grüne Berufe) |
+| `gaertner` | Ausbildungsbetriebe im Gartenbau | Urlaubstabelle mit GaLaBau und Erwerbsgartenbau, Hinweis zur geänderten Eintragungspraxis, Durchwahl der Gartenbau-Beratung | Merkblatt Gartenbau · Leitfaden Gartenbau (`anhang/gaertner/`) |
+| `gruene-berufe` | Landwirtschaft, Weinbau, Fischerei und weitere Grüne Berufe | Urlaubstabelle ohne Gartenbau-Tarife (gesetzliches Minimum, tarifgebundene und öffentliche Betriebe), Zentrale als Telefon | Merkblatt Grüne Berufe · Leitfaden Grüne Berufe (`anhang/gruene-berufe/`) |
 
 Eine Vorlage, zwei Ausgaben: `newsletter.html` enthält Blöcke
 `<!--[wenn gaertner]--> … <!--[/wenn]-->`, die nur in der genannten Variante
@@ -38,9 +38,9 @@ befüllt. Eine weitere Variante ist eine weitere JSON-Datei.
    Abschnitt 3 (aus dem Save-the-Date-Flyer übernommen). Neue Platzhalter in
    eckigen Klammern meldet der Build. Programm, Anmeldeweg und ein
    Anmelde-Button kommen mit der eigentlichen Einladung (siehe `ROADMAP.md`).
-2. **Anhänge prüfen.** Azubi-Info in `anhang/alle/`, Leitfaden Gartenbau in
-   `anhang/gaertner/`, Leitfaden Grüne Berufe in `anhang/gruene-berufe/` –
-   alles im Repo, bei neuer Fassung ersetzen. Das Merkblatt der Variante hängt
+2. **Anhänge prüfen.** Leitfaden Gartenbau in `anhang/gaertner/`, Leitfaden
+   Grüne Berufe in `anhang/gruene-berufe/` – im Repo, bei neuer Fassung
+   ersetzen. `anhang/alle/` bleibt leer, die Azubi-Info geht nicht mit. Das Merkblatt der Variante hängt
    automatisch an – Details in [`anhang/README.md`](anhang/README.md).
 3. **Bauen.**
    ```bash

@@ -14,13 +14,15 @@ ersetzen, Dateinamen beibehalten. README-Dateien werden nie angehängt.
 Stand Oktober 2026:
 
 ```
-anhang/alle/Azubi-Info-Rechte-und-Pflichten-2026.pdf        Azubi-Info „Gut durch die Ausbildung“ (Stand 15.09.2026)
-anhang/gaertner/Leitfaden-Ausbildung-Gartenbau-2026.pdf     Leitfaden „Klar handeln“, Fassung Gartenbau (02.10.2026)
-anhang/gruene-berufe/Leitfaden-Ausbildung-Gruene-Berufe-2026.pdf  Leitfaden, Fassung Grüne Berufe (02.10.2026)
+anhang/gaertner/Leitfaden-Ausbildung-Gartenbau-2026.pdf          Leitfaden „Klar handeln“, Fassung Gartenbau (02.10.2026, komprimiert)
+anhang/gruene-berufe/Leitfaden-Ausbildung-Gruene-Berufe-2026.pdf  Leitfaden, Fassung Grüne Berufe (02.10.2026, komprimiert)
 ```
+
+`anhang/alle/` ist derzeit leer: Die Azubi-Info „Gut durch die Ausbildung“ geht
+bewusst nicht mit – die Ausbilder-Info richtet sich an die Betriebe.
 
 Die Dateinamen sind bewusst kurz und ohne Umlaute (manche Mailserver
 verstümmeln sonst den Namen).
 
-Wird nur ein Dokument mitgeschickt, die zweite Dokument-Karte in
-`newsletter.html` (Abschnitt 2) entfernen.
+Kommt ein weiteres Dokument dazu, in `newsletter.html` (Abschnitt 2) eine
+zweite Dokument-Karte ergänzen – halbiert nebeneinander, wie in `CLAUDE.md` 3.1.
