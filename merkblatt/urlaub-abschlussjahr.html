@@ -9,7 +9,9 @@
 <!--
   Merkblatt zum Newsletter-Abschnitt „Urlaub im Abschlussjahr frühzeitig planen“.
   Text: Ausbildungsberatung Grüne Berufe (Fachbereich). Layout: Landes-CD über bw-theme.css.
-  PDF erzeugen: node tools/build_merkblatt.js  →  merkblatt/Merkblatt-Urlaub-letztes-Ausbildungsjahr.pdf
+  Varianten: Blöcke zwischen den Kommentarmarken "[wenn gaertner]" bzw. "[wenn gruene-berufe]"
+  und "[/wenn]" bleiben nur in der jeweiligen Variante stehen (varianten/*.json nennt den PDF-Namen).
+  PDF erzeugen: node tools/build_merkblatt.js  →  merkblatt/Merkblatt-…-<Variante>.pdf
 -->
 <link rel="stylesheet" href="../bw-theme.css">
 <style>
@@ -54,7 +56,7 @@
 <article class="blatt">
   <header class="kopf">
     <img src="../assets/logo/rpf-logo.png" alt="Baden-Württemberg – Regierungspräsidium Freiburg">
-    <p class="eyebrow">Merkblatt<br>Ausbildungsberatung Grüne Berufe<br>Stand September 2026</p>
+    <p class="eyebrow">Merkblatt<br>Ausbildungsberatung Grüne Berufe<br><!--[wenn gaertner]-->Gartenbau · <!--[/wenn]--><!--[wenn gruene-berufe]-->Landwirtschaft, Weinbau, Fischerei · <!--[/wenn]-->Stand September 2026</p>
   </header>
 
   <h1>Urlaub im letzten Ausbildungsjahr.</h1>
@@ -75,6 +77,17 @@
       <tr><th scope="col">Ausbildungsbetrieb</th><th scope="col">Urlaubsanspruch</th></tr>
     </thead>
     <tbody>
+<!--[wenn gruene-berufe]-->
+      <tr>
+        <td>Betriebe ohne höheren Tarifvertrag</td>
+        <td>Es gilt das gesetzliche Minimum: <span class="zahl hervor">20 Arbeitstage</span> bei einer Fünftagewoche bzw. 24 Werktage bei einer Sechstagewoche.</td>
+      </tr>
+      <tr>
+        <td>Tarifgebundene Betriebe, etwa in Landwirtschaft oder Weinbau</td>
+        <td>Es gilt der jeweils einschlägige Branchen- oder Ausbildungstarifvertrag. Für die Behandlung des zusätzlichen tariflichen Urlaubs im Abschlussjahr ist die konkret geltende Tarif- oder Vertragsregelung zu prüfen.</td>
+      </tr>
+<!--[/wenn]-->
+<!--[wenn gaertner]-->
       <tr>
         <td>Betriebe im Geltungsbereich des GaLaBau-Bundesrahmentarifvertrags</td>
         <td>Beim regulären Ausbildungsende nach dem 30. Juni sind <span class="zahl hervor">30 Arbeitstage</span> einzutragen. Der allgemeinverbindliche Tarifvertrag sieht hierfür nach erfüllter Wartezeit keine anteilige Kürzung vor. Ohne höheren Tarifvertrag beträgt das gesetzliche Minimum 20 Arbeitstage bzw. 24 Werktage.</td>
@@ -83,13 +96,14 @@
         <td>Erwerbsgartenbau: Baumschule, Friedhofsgärtnerei, Gemüsebau, Obstbau, Staudengärtnerei und Zierpflanzenbau</td>
         <td>Für Volljährige gelten bei Anwendung des Tarifs <span class="zahl">24 Arbeitstage</span> Jahresurlaub. Ohne höheren Tarifvertrag beträgt das gesetzliche Minimum 20 Arbeitstage bzw. 24 Werktage. Für die Behandlung des zusätzlichen Urlaubs im Abschlussjahr ist die konkret geltende Tarif- oder Vertragsregelung zu prüfen.</td>
       </tr>
+<!--[/wenn]-->
       <tr>
         <td>Kommunale, staatliche oder kirchliche Ausbildungsbetriebe</td>
         <td>Hier gelten die jeweiligen Ausbildungstarifverträge oder Arbeitsvertragsregelungen. Die Fachrichtung allein entscheidet nicht über den Urlaubsanspruch.</td>
       </tr>
     </tbody>
   </table>
-  <p>Für Minderjährige gelten höhere gesetzliche Mindestansprüche. Bei Vereinbarung ganzer Urlaubstage sind dies bei einer Fünftagewoche 25 Tage unter 16 Jahren, 23 Tage mit 16 Jahren und 21 Tage mit 17 Jahren. Maßgeblich ist das Alter am 1. Januar. Höhere tarifliche Ansprüche, insbesondere die 30 Tage im GaLaBau, gehen vor.</p>
+  <p>Für Minderjährige gelten höhere gesetzliche Mindestansprüche. Bei Vereinbarung ganzer Urlaubstage sind dies bei einer Fünftagewoche 25 Tage unter 16 Jahren, 23 Tage mit 16 Jahren und 21 Tage mit 17 Jahren. Maßgeblich ist das Alter am 1. Januar. Höhere tarifliche Ansprüche<!--[wenn gaertner]-->, insbesondere die 30 Tage im GaLaBau,<!--[/wenn]--> gehen vor.</p>
 
   <h2>Wie lässt sich der Urlaub praktisch planen?</h2>
   <ul class="haken">
@@ -103,7 +117,7 @@
 
   <footer class="fuss">
     <p><strong>Herausgeber:</strong> Regierungspräsidium Freiburg, Referat 31 – Ausbildungsberatung Grüne Berufe · Bertoldstraße 43, 79098 Freiburg im Breisgau · abteilung3@rpf.bwl.de · Stand: September 2026</p>
-    <p><strong>Rechtsgrundlagen:</strong> §§ 4, 5, 6 und 7 Bundesurlaubsgesetz (BUrlG); § 19 Jugendarbeitsschutzgesetz (JArbSchG); Bundesrahmentarifvertrag für den Garten-, Landschafts- und Sportplatzbau; Tarifvertrag Erwerbsgartenbau Baden-Württemberg. Dieses Merkblatt ersetzt keine rechtliche Prüfung im Einzelfall – bei Fragen berät Sie die Ausbildungsberatung.</p>
+    <p><strong>Rechtsgrundlagen:</strong> §§ 4, 5, 6 und 7 Bundesurlaubsgesetz (BUrlG); § 19 Jugendarbeitsschutzgesetz (JArbSchG); <!--[wenn gaertner]-->Bundesrahmentarifvertrag für den Garten-, Landschafts- und Sportplatzbau; Tarifvertrag Erwerbsgartenbau Baden-Württemberg.<!--[/wenn]--><!--[wenn gruene-berufe]-->die jeweils geltenden Branchen- und Ausbildungstarifverträge.<!--[/wenn]--> Dieses Merkblatt ersetzt keine rechtliche Prüfung im Einzelfall – bei Fragen berät Sie die Ausbildungsberatung.</p>
   </footer>
 </article>
 </body>

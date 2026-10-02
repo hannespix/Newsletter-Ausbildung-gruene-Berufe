@@ -12,7 +12,11 @@ damit `newsletter.html` für die nächste Ausgabe frei ist.
 
 ---
 
-## A1 — September 2026: Start des Ausbildungsjahres
+## A1 — September 2026: Start des Ausbildungsjahres (zwei Varianten)
+**Varianten:** `gaertner` (Gartenbau) und `gruene-berufe` (Landwirtschaft, Weinbau,
+Fischerei und weitere) – je eigene Urlaubstabelle, eigenes Merkblatt, eigene
+Leitfaden-Fassung. Die Leitfäden „Klar handeln in der Ausbildung“ (Gartenbau /
+Grüne Berufe) werden nachgereicht, sobald sie fertig sind.
 **Inhalt:** Urlaub im Abschlussjahr (Kurzfassung + Merkblatt-PDF) · Leitfaden
 „Rechte und Pflichten“, Fassung Grüne Berufe (Anhang) ·
 Save the Date „Ausbildertag on tour 2027“ mit den drei Terminen aus dem Flyer

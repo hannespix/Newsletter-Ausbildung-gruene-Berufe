@@ -2,9 +2,13 @@
 /dist/
 
 # Anhänge: die Leitfaden-PDFs liegen im Repo Rechte-und-Pflichten-von-Azubis
-# (pdf/) und werden vor dem Build nach anhang/ kopiert – nicht doppelt versionieren.
-anhang/*
+# (pdf/) und werden vor dem Build nach anhang/alle/ bzw. anhang/<variante>/
+# kopiert – nicht doppelt versionieren. Nur die README bleibt im Repo.
+anhang/**
 !anhang/README.md
+
+# Zwischendateien des Merkblatt-Builds
+merkblatt/.build-*.html
 
 # OS / Editor / Python
 .DS_Store

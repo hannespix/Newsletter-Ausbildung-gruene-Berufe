@@ -10,7 +10,17 @@ Anhänge kommen aus dem Repo `Rechte-und-Pflichten-von-Azubis`.
 
 **Aktuelle Ausgabe:** September 2026 – Start des Ausbildungsjahres (Urlaub im
 Abschlussjahr mit Merkblatt, Leitfaden „Rechte und Pflichten“, Save the Date
-zum Ausbildertag on tour 2027 im Layout des Flyers).
+zum Ausbildertag on tour 2027 im Layout des Flyers) – in **zwei Varianten**:
+
+| Variante | Empfänger | Eigenes | Anhänge |
+|----------|-----------|---------|---------|
+| `gaertner` | Ausbildungsbetriebe im Gartenbau | Urlaubstabelle mit GaLaBau und Erwerbsgartenbau, Hinweis zur geänderten Eintragungspraxis, Durchwahl der Gartenbau-Beratung | Merkblatt Gartenbau · `anhang/alle/` · `anhang/gaertner/` (Leitfaden Gartenbau) |
+| `gruene-berufe` | Landwirtschaft, Weinbau, Fischerei und weitere Grüne Berufe | Urlaubstabelle ohne Gartenbau-Tarife (gesetzliches Minimum, tarifgebundene und öffentliche Betriebe), Zentrale als Telefon | Merkblatt Grüne Berufe · `anhang/alle/` · `anhang/gruene-berufe/` (Leitfaden Grüne Berufe) |
+
+Eine Vorlage, zwei Ausgaben: `newsletter.html` enthält Blöcke
+`<!--[wenn gaertner]--> … <!--[/wenn]-->`, die nur in der genannten Variante
+stehen bleiben, und Schlüssel wie `{{EYEBROW}}`, die `varianten/<name>.json`
+befüllt. Eine weitere Variante ist eine weitere JSON-Datei.
 
 > In der Mail heißt es bewusst **„Ausbilder-Info“**, nicht „Newsletter“, und es
 > gibt keine Ausgabennummer: Es soll keine Erwartung regelmäßiger Post entstehen.
@@ -28,23 +38,26 @@ zum Ausbildertag on tour 2027 im Layout des Flyers).
    Abschnitt 3 (aus dem Save-the-Date-Flyer übernommen). Neue Platzhalter in
    eckigen Klammern meldet der Build. Programm, Anmeldeweg und ein
    Anmelde-Button kommen mit der eigentlichen Einladung (siehe `ROADMAP.md`).
-2. **Anhänge ablegen.** Die PDFs aus `Rechte-und-Pflichten-von-Azubis/pdf/` nach
-   `anhang/` kopieren (Leitfaden „Grüne Berufe“ für Betriebe, Azubi-Info). Alles
-   in `anhang/` hängt automatisch an der E-Mail, ebenso die Merkblätter aus
-   `merkblatt/` – Details in [`anhang/README.md`](anhang/README.md).
+2. **Anhänge ablegen.** Die PDFs aus `Rechte-und-Pflichten-von-Azubis/pdf/`
+   kopieren: Azubi-Info nach `anhang/alle/`, Leitfaden Gartenbau nach
+   `anhang/gaertner/`, Leitfaden Grüne Berufe nach `anhang/gruene-berufe/`. Das
+   Merkblatt der Variante hängt automatisch an – Details in
+   [`anhang/README.md`](anhang/README.md).
 3. **Bauen.**
    ```bash
    python3 tools/build_newsletter.py
    ```
-   Erzeugt in `dist/`: `newsletter.eml` (Versand), `newsletter.html` (Vorschau
-   im Browser), `newsletter.txt` (Nur-Text-Fassung). Mit `--streng` bricht der
-   Build bei offenen Platzhaltern ab.
-4. **Prüfen.** `dist/newsletter.html` im Browser ansehen (auch schmal ziehen),
-   dann eine Testmail an die eigene Adresse und an eine externe Adresse
-   (z. B. ein Gmail-Konto) schicken.
-5. **Versenden.** `dist/newsletter.eml` in Outlook öffnen, Empfänger in **Bcc**,
-   Anhänge prüfen, senden. Bei großen Verteilern in mehreren Tranchen
-   (Grenzen des Mailservers beachten).
+   Erzeugt je Variante in `dist/gaertner/` und `dist/gruene-berufe/`:
+   `newsletter.eml` (Versand), `newsletter.html` (Vorschau im Browser),
+   `newsletter.txt` (Nur-Text-Fassung). `--variante gaertner` baut nur eine,
+   `--streng` bricht bei offenen Platzhaltern ab.
+4. **Prüfen.** Beide `dist/<variante>/newsletter.html` im Browser ansehen (auch
+   schmal ziehen), dann je Variante eine Testmail an die eigene Adresse und an
+   eine externe Adresse (z. B. ein Gmail-Konto) schicken.
+5. **Versenden.** `dist/gaertner/newsletter.eml` an den Gartenbau-Verteiler,
+   `dist/gruene-berufe/newsletter.eml` an die übrigen Grünen Berufe – jeweils in
+   Outlook öffnen, Empfänger in **Bcc**, Anhänge prüfen, senden. Bei großen
+   Verteilern in mehreren Tranchen (Grenzen des Mailservers beachten).
 
 ### Ohne Python: Build aus GitHub Actions
 
@@ -119,11 +132,12 @@ Bilder mit Text. Ein „Mehr lesen“-Link ist nur sinnvoll, wenn der Text auf
 einer Seite des RPF veröffentlicht ist.
 
 Merkblätter liegen als HTML unter `merkblatt/` (Landesdesign über
-`bw-theme.css`, Text vom Fachbereich) und werden mit Chromium als getaggtes
-A4-PDF gedruckt – mit den Landesschriften aus `assets/fonts/`:
+`bw-theme.css`, Text vom Fachbereich, Variantenblöcke wie im Newsletter) und
+werden je Variante mit Chromium als getaggtes A4-PDF gedruckt – mit den
+Landesschriften aus `assets/fonts/`:
 ```bash
 npm i -g playwright && npx playwright install chromium   # einmalig
-node tools/build_merkblatt.js                            # -> merkblatt/*.pdf
+node tools/build_merkblatt.js [variante]                 # -> merkblatt/Merkblatt-…-<Variante>.pdf
 ```
 Das fertige PDF wird mitversioniert, damit der Newsletter-Build es ohne
 Node/Playwright anhängen kann.
@@ -147,17 +161,18 @@ Node/Playwright anhängen kann.
 ## Struktur
 
 ```
-newsletter.html              die aktuelle Ausgabe (Quelle mit --bw-* Tokens)
+newsletter.html              die aktuelle Ausgabe (Quelle mit --bw-* Tokens und Variantenblöcken)
+varianten/                   je Variante eine JSON: Betreff, Eyebrow, Kontakt, Merkblatt-Datei
 bw-theme.css                 Design-System, Single Source of Truth (aus der Vorlage)
 assets/logo/                 RPF-Logo positiv/negativ — lizenzpflichtig, Repo privat
 assets/fotos/                Fotos des Save-the-Date-Flyers, auf 600×432 px zugeschnitten (JPEG)
 assets/fonts/                BaWue Sans/Serif (woff2/woff) — nur für Merkblatt-PDFs, lizenzpflichtig
 merkblatt/                   Merkblätter: HTML-Quelle im Landesdesign + gedrucktes PDF
 tools/build_merkblatt.js     druckt merkblatt/*.html als getaggtes A4-PDF (Chromium)
-anhang/                      Anhänge der E-Mail (nicht versioniert)
+anhang/alle/ · anhang/<variante>/  Anhänge der E-Mail (nicht versioniert)
 tools/build_newsletter.py    Build: Tokens auflösen, Logo einbetten, .eml/.html/.txt
 tools/check_offline.py       Offline-/CDN-Prüfung (CI-Gate)
-.github/workflows/ci.yml     Offline-Check + Build + Artefakt bei jedem Push/PR
+.github/workflows/ci.yml     Offline-Check + Build beider Varianten + Artefakt bei jedem Push/PR
 .github/workflows/claude.yml @claude-Loop (Issue/PR → Branch → PR)
 .github/ISSUE_TEMPLATE/      Vorlagen für Ausgaben und Aufgaben
 CLAUDE.md AGENTS.md ROADMAP.md

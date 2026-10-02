@@ -75,8 +75,12 @@ Vor „fertig“ prüft `@claude` selbst und hakt im PR-Text ab:
       Outlook-Sonderwege, HTML < 100 KB, Media Queries nur als Bonus.
 - [ ] **Zero-Trust:** keine externen Bilder/Fonts/Skripte;
       `python3 tools/check_offline.py` läuft fehlerfrei durch.
-- [ ] **Build:** `python3 tools/build_newsletter.py` ohne Fehler; Vorschau
-      breit und schmal geprüft; Nur-Text-Fassung lesbar.
+- [ ] **Build:** `python3 tools/build_newsletter.py` ohne Fehler für **alle
+      Varianten** (`varianten/*.json`); jede Vorschau breit und schmal geprüft;
+      Nur-Text-Fassung lesbar; Merkblatt-PDFs aktuell (`node tools/build_merkblatt.js`).
+- [ ] **Varianten sauber getrennt:** Fachinhalte einer Berufsgruppe nur in
+      ihrem `<!--[wenn …]-->`-Block, Gemeinsames außerhalb; Anhänge je Variante
+      stimmen (`anhang/alle/`, `anhang/<variante>/`, Merkblatt).
 - [ ] **Barrierefrei:** `lang`, `role="presentation"`, `alt`-Texte,
       Überschriftenhierarchie, Kontrast ≥ 4,5:1.
 - [ ] **Texte:** Deutsch, aktive Verben, Sentence-Case, Zahlen de-DE; in der

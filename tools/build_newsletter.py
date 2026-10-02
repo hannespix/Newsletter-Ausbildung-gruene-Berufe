@@ -12,21 +12,26 @@ Was passiert:
      mitgeschickt. Fehlt das Logo, steht eine reine Wortmarke an seiner Stelle
      (das Logo wird nie nachgebaut).
   3. Textfassung: aus dem HTML entsteht die Nur-Text-Alternative der E-Mail.
-  4. Anhänge: merkblatt/*.pdf und alle Dateien in anhang/ (außer README.md) hängen an der E-Mail.
-  5. Prüfung: offene Platzhalter in eckigen Klammern werden gemeldet.
+  4. Varianten: je Datei in varianten/*.json entsteht eine Ausgabe. {{SCHLÜSSEL}}
+     werden aus der JSON ersetzt, Blöcke <!--[wenn gaertner]--> … <!--[/wenn]-->
+     bleiben nur in der genannten Variante stehen (mehrere: <!--[wenn a,b]-->).
+  5. Anhänge je Variante: das Merkblatt aus der JSON (merkblatt/), alle Dateien
+     in anhang/alle/ und anhang/<variante>/ (außer README.md).
+  6. Prüfung: offene Platzhalter in eckigen Klammern werden gemeldet.
 
-Ausgabe (dist/):
+Ausgabe (dist/<variante>/):
   newsletter.html   Vorschau im Browser (Bilder eingebettet, Styles aufgelöst)
   newsletter.eml    E-Mail zum Öffnen in Outlook oder Thunderbird. Die Kopfzeile
                     „X-Unsent: 1“ lässt das klassische Outlook die Datei direkt
                     als neue, noch nicht gesendete Nachricht öffnen.
   newsletter.txt    Nur-Text-Fassung
 
-Aufruf:  python3 tools/build_newsletter.py [--streng] [--betreff "…"] [--absender "…"]
+Aufruf:  python3 tools/build_newsletter.py [--variante gaertner] [--streng] [--absender "…"]
 Nur Python-Standardbibliothek, keine Abhängigkeiten.
 """
 import argparse
 import base64
+import json
 import mimetypes
 import re
 import sys
@@ -356,14 +361,80 @@ def eml_bauen(html_mail: str, text: str, bilder: list, anhaenge: list, betreff: 
     return msg.as_bytes(policy=policy.SMTP)
 
 
+# --------------------------------------------------------------- Varianten
+BLOCK_RE = re.compile(r"<!--\[wenn ([\w,\- ]+)\]-->([\s\S]*?)<!--\[/wenn\]-->")
+SCHLUESSEL_RE = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
+
+
+def lade_varianten(ordner: Path, auswahl: str | None) -> list[dict]:
+    dateien = sorted(ordner.glob("*.json")) if ordner.exists() else []
+    if not dateien:
+        sys.exit("FEHLER: keine Varianten gefunden – varianten/<name>.json anlegen (siehe README).")
+    varianten = []
+    for d in dateien:
+        v = json.loads(d.read_text(encoding="utf-8"))
+        v.setdefault("ausgabe", d.stem)
+        varianten.append(v)
+    if auswahl:
+        varianten = [v for v in varianten if v["ausgabe"] == auswahl]
+        if not varianten:
+            sys.exit(f"FEHLER: Variante {auswahl!r} nicht gefunden. Vorhanden: "
+                     + ", ".join(d.stem for d in dateien))
+    return varianten
+
+
+def variante_anwenden(html: str, v: dict) -> str:
+    """Behält nur die Blöcke der Variante und setzt {{SCHLÜSSEL}} aus der JSON ein."""
+    kennung = v["ausgabe"]
+
+    def block(m):
+        namen = {n.strip() for n in m.group(1).split(",")}
+        return m.group(2) if kennung in namen else ""
+
+    html = BLOCK_RE.sub(block, html)
+    fehlend = set()
+
+    def ersetze(m):
+        k = m.group(1)
+        wert = v.get(k, v.get(k.lower()))
+        if isinstance(wert, str):
+            return wert
+        fehlend.add(k)
+        return m.group(0)
+
+    html = SCHLUESSEL_RE.sub(ersetze, html)
+    if fehlend:
+        sys.exit(f"FEHLER: Variante {kennung}: in varianten/{kennung}.json fehlen die Werte "
+                 + ", ".join(sorted(fehlend)))
+    return html
+
+
+def anhaenge_sammeln(v: dict, anhang_dir: Path, hinweise: list) -> list:
+    """Merkblatt der Variante + anhang/alle/ + anhang/<variante>/ (+ lose Dateien in anhang/)."""
+    liste = []
+    if v.get("merkblatt"):
+        mb = ROOT / "merkblatt" / v["merkblatt"]
+        if mb.exists():
+            liste.append(mb)
+        else:
+            hinweise.append(f"{v['ausgabe']}: Merkblatt fehlt ({mb.name}) – node tools/build_merkblatt.js ausführen.")
+    for ordner in (anhang_dir / "alle", anhang_dir / v["ausgabe"], anhang_dir):
+        if ordner.exists():
+            liste += sorted(p for p in ordner.iterdir()
+                            if p.is_file() and p.name.lower() != "readme.md" and not p.name.startswith("."))
+    return liste
+
+
 # -------------------------------------------------------------------- Main
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Newsletter bauen (Vorschau, .eml, .txt)")
+    ap = argparse.ArgumentParser(description="Newsletter je Variante bauen (Vorschau, .eml, .txt)")
     ap.add_argument("--quelle", default="newsletter.html", help="Quelldatei (Standard: newsletter.html)")
     ap.add_argument("--theme", default="bw-theme.css", help="Design-System (Standard: bw-theme.css)")
+    ap.add_argument("--varianten", default="varianten", help="Ordner mit Varianten-JSON (Standard: varianten/)")
+    ap.add_argument("--variante", help="nur diese Variante bauen (Standard: alle)")
     ap.add_argument("--anhang", default="anhang", help="Ordner mit Anhängen (Standard: anhang/)")
-    ap.add_argument("--out", default="dist", help="Zielordner (Standard: dist/)")
-    ap.add_argument("--betreff", help="Betreff der E-Mail (Standard: <title> der Quelldatei)")
+    ap.add_argument("--out", default="dist", help="Zielordner (Standard: dist/, je Variante ein Unterordner)")
+    ap.add_argument("--betreff", help="Betreff für alle Varianten (Standard: betreff aus der JSON, sonst <title>)")
     ap.add_argument("--absender", default=ABSENDER, help="Absender der E-Mail")
     ap.add_argument("--streng", action="store_true",
                     help="Abbruch mit Fehler bei offenen Platzhaltern oder fehlendem Logo")
@@ -371,81 +442,73 @@ def main() -> int:
 
     quelle = ROOT / args.quelle
     theme = ROOT / args.theme
-    out = ROOT / args.out
     if not quelle.exists():
         sys.exit(f"FEHLER: {args.quelle} nicht gefunden.")
     if not theme.exists():
         sys.exit(f"FEHLER: {args.theme} nicht gefunden.")
 
-    hinweise: list[str] = []
-    html = quelle.read_text(encoding="utf-8")
-
-    # 1) Tokens auflösen, 2) Kommentare kürzen
     tokens = lade_tokens(theme)
-    html = tokens_einsetzen(html, tokens)
-    html = kommentare_entfernen(html)
-    if re.search(r"var\(\s*--", html):
-        sys.exit("FEHLER: Es sind noch var(--…)-Verweise übrig.")
-    if re.search(r'<img\b[^>]*\bsrc\s*=\s*"https?://', html, re.I):
-        sys.exit("FEHLER: externes Bild im Newsletter – Bilder gehören nach assets/ und werden eingebettet.")
-
-    # 3) Bilder einbetten (Vorschau: base64, E-Mail: Content-ID)
-    html_vorschau, html_mail, bilder = bilder_verarbeiten(html, tokens, hinweise)
-
-    # 4) Textfassung und Platzhalter
-    text = textfassung(html_mail)
-    platzhalter = sorted(set(re.findall(r"\[[^\[\]\n]{2,90}\]", text)))
-    if platzhalter:
-        hinweise.append("Offene Platzhalter (vor dem Versand ersetzen): " + ", ".join(platzhalter))
-
-    # 5) Betreff und Anhänge
-    betreff = args.betreff
-    if not betreff:
-        m = re.search(r"<title>(.*?)</title>", html, re.S | re.I)
-        betreff = re.sub(r"\s+", " ", m.group(1)).strip() if m else "Newsletter Ausbildung Grüne Berufe"
-    anhang_dir = ROOT / args.anhang
-    anhaenge = sorted(p for p in anhang_dir.iterdir()
-                      if p.is_file() and p.name.lower() != "readme.md" and not p.name.startswith(".")) \
-        if anhang_dir.exists() else []
-    # Merkblätter aus dem Repo (merkblatt/*.pdf) hängen immer an – sie gehören zur Ausgabe.
-    merkblatt_dir = ROOT / "merkblatt"
-    if merkblatt_dir.exists():
-        anhaenge = sorted(merkblatt_dir.glob("*.pdf")) + anhaenge
-
-    # 6) Schreiben
-    out.mkdir(parents=True, exist_ok=True)
-    (out / "newsletter.html").write_text(html_vorschau, encoding="utf-8")
-    (out / "newsletter.txt").write_text(text, encoding="utf-8")
-    eml = eml_bauen(html_mail, text, bilder, anhaenge, betreff, args.absender)
-    (out / "newsletter.eml").write_bytes(eml)
-
-    kb = lambda p: (out / p).stat().st_size / 1024
-    print(f"Betreff : {betreff}")
+    vorlage = quelle.read_text(encoding="utf-8")
+    varianten = lade_varianten(ROOT / args.varianten, args.variante)
     print(f"Absender: {args.absender}")
-    print(f"OK  -> {out / 'newsletter.html'}  ({kb('newsletter.html'):.0f} KB)  Vorschau im Browser")
-    print(f"OK  -> {out / 'newsletter.eml'}   ({kb('newsletter.eml'):.0f} KB)  "
-          f"{len(bilder)} Bild(er) eingebettet ({sum(len(b.daten) for b in bilder) / 1024:.0f} KB), "
-          f"{len(anhaenge)} Anhang/Anhänge")
-    for a in anhaenge:
-        print(f"         + {a.name} ({a.stat().st_size / 1024:.0f} KB)")
-    print(f"OK  -> {out / 'newsletter.txt'}   Nur-Text-Fassung")
-    mail_kb = len(html_mail.encode("utf-8")) / 1024
-    if mail_kb > GMAIL_GRENZE_KB:
-        hinweise.append(f"HTML der E-Mail ist {mail_kb:.0f} KB – Gmail kürzt Nachrichten über ~102 KB.")
-    bild_kb = sum(len(b.daten) for b in bilder) / 1024
-    if bild_kb > 1024:
-        hinweise.append(f"Eingebettete Bilder: {bild_kb:.0f} KB – Fotos kleiner zuschneiden oder stärker komprimieren.")
-    if not any(a.parent.name == "anhang" for a in anhaenge):
-        hinweise.append("Keine Dateien in anhang/ – Leitfaden- und Azubi-Info-PDF dort ablegen, damit sie mitgeschickt werden.")
-    if hinweise:
-        print("\nHinweise:")
-        for h in hinweise:
-            print("  • " + h)
-    ernst = platzhalter or any(h.startswith("Bild fehlt") for h in hinweise)
+    ernst = False
+
+    for v in varianten:
+        hinweise: list[str] = []
+        html = variante_anwenden(vorlage, v)
+        html = tokens_einsetzen(html, tokens)
+        html = kommentare_entfernen(html)
+        if re.search(r"var\(\s*--", html):
+            sys.exit("FEHLER: Es sind noch var(--…)-Verweise übrig.")
+        if re.search(r'<img\b[^>]*\bsrc\s*=\s*"https?://', html, re.I):
+            sys.exit("FEHLER: externes Bild im Newsletter – Bilder gehören nach assets/ und werden eingebettet.")
+
+        html_vorschau, html_mail, bilder = bilder_verarbeiten(html, tokens, hinweise)
+        text = textfassung(html_mail)
+        platzhalter = sorted(set(re.findall(r"\[[^\[\]\n]{2,90}\]", text)))
+        if platzhalter:
+            hinweise.append("Offene Platzhalter (vor dem Versand ersetzen): " + ", ".join(platzhalter))
+
+        betreff = args.betreff or v.get("betreff")
+        if not betreff:
+            m = re.search(r"<title>(.*?)</title>", html, re.S | re.I)
+            betreff = re.sub(r"\s+", " ", m.group(1)).strip() if m else "Ausbilder-Info Grüne Berufe"
+        anhaenge = anhaenge_sammeln(v, ROOT / args.anhang, hinweise)
+
+        out = ROOT / args.out / v["ausgabe"]
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "newsletter.html").write_text(html_vorschau, encoding="utf-8")
+        (out / "newsletter.txt").write_text(text, encoding="utf-8")
+        (out / "newsletter.eml").write_bytes(eml_bauen(html_mail, text, bilder, anhaenge, betreff, args.absender))
+
+        kb = lambda p: (out / p).stat().st_size / 1024
+        print(f"\n== Variante {v['ausgabe']}: {v.get('name', '')}")
+        print(f"Betreff : {betreff}")
+        print(f"OK  -> {out.relative_to(ROOT)}/newsletter.html  ({kb('newsletter.html'):.0f} KB)  Vorschau im Browser")
+        print(f"OK  -> {out.relative_to(ROOT)}/newsletter.eml   ({kb('newsletter.eml'):.0f} KB)  "
+              f"{len(bilder)} Bild(er) eingebettet ({sum(len(b.daten) for b in bilder) / 1024:.0f} KB), "
+              f"{len(anhaenge)} Anhang/Anhänge")
+        for a in anhaenge:
+            print(f"         + {a.name} ({a.stat().st_size / 1024:.0f} KB)")
+        print(f"OK  -> {out.relative_to(ROOT)}/newsletter.txt   Nur-Text-Fassung")
+        mail_kb = len(html_mail.encode("utf-8")) / 1024
+        if mail_kb > GMAIL_GRENZE_KB:
+            hinweise.append(f"HTML der E-Mail ist {mail_kb:.0f} KB – Gmail kürzt Nachrichten über ~102 KB.")
+        bild_kb = sum(len(b.daten) for b in bilder) / 1024
+        if bild_kb > 1024:
+            hinweise.append(f"Eingebettete Bilder: {bild_kb:.0f} KB – Fotos kleiner zuschneiden oder stärker komprimieren.")
+        if not any(a.parent.name in ("alle", v["ausgabe"]) for a in anhaenge):
+            hinweise.append(f"Keine Dateien in anhang/alle/ oder anhang/{v['ausgabe']}/ – Leitfaden und Azubi-Info dort ablegen.")
+        if hinweise:
+            print("Hinweise:")
+            for h in hinweise:
+                print("  • " + h)
+        ernst = ernst or bool(platzhalter) or any(h.startswith("Bild fehlt") for h in hinweise)
+
     if args.streng and ernst:
         print("\nAbbruch (--streng): Platzhalter ersetzen bzw. Logo ablegen und erneut bauen.")
         return 1
-    print("\nVersand: dist/newsletter.eml in Outlook öffnen, Empfänger in Bcc eintragen, senden (siehe README).")
+    print("\nVersand: dist/<variante>/newsletter.eml in Outlook öffnen, Empfänger in Bcc eintragen, senden (siehe README).")
     return 0
 
 
