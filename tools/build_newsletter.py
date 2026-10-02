@@ -27,7 +27,11 @@ z. B. Ausbilder-Info-2026-10-Gartenbau):
                     als neue, noch nicht gesendete Nachricht öffnen.
   <dateiname>.txt   Nur-Text-Fassung
 
-Aufruf:  python3 tools/build_newsletter.py [--variante gaertner] [--streng] [--absender "…"]
+Aufruf:  python3 tools/build_newsletter.py [--variante gaertner] [--streng] [--antwort-an "…"] [--absender "…"]
+Absender: Die .eml trägt absichtlich kein „From“ – Outlook sendet aus dem eigenen
+Konto. Antworten gehen per „Reply-To“ an das Funktionspostfach. Soll das
+Funktionspostfach selbst Absender sein (--absender), muss das Konto in Exchange
+„Senden als“ für dieses Postfach dürfen, sonst: SendAsDenied, nichts geht raus.
 Nur Python-Standardbibliothek, keine Abhängigkeiten.
 """
 import argparse
@@ -47,7 +51,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 mimetypes.add_type("image/png", ".png")
 
-ABSENDER = "Ausbildungsberatung Grüne Berufe <abteilung3@rpf.bwl.de>"
+ANTWORT_AN = "Ausbildungsberatung Grüne Berufe <abteilung3@rpf.bwl.de>"
 CID_DOMAIN = "newsletter.rpf.bwl.de"
 GMAIL_GRENZE_KB = 100  # Gmail schneidet Nachrichten über ~102 KB ab
 
@@ -341,9 +345,16 @@ def textfassung(html: str) -> str:
 
 
 # ------------------------------------------------------------------ E-Mail
-def eml_bauen(html_mail: str, text: str, bilder: list, anhaenge: list, betreff: str, absender: str) -> bytes:
+def eml_bauen(html_mail: str, text: str, bilder: list, anhaenge: list, betreff: str,
+              absender: str | None, antwort_an: str | None) -> bytes:
     msg = EmailMessage(policy=policy.SMTP)
-    msg["From"] = absender
+    # Kein From: Outlook sendet dann aus dem eigenen Konto. Ein fremder Absender
+    # (Funktionspostfach) braucht in Exchange die Berechtigung „Senden als“,
+    # sonst weist der Server die Nachricht beim Senden ab (SendAsDenied).
+    if absender:
+        msg["From"] = absender
+    if antwort_an:
+        msg["Reply-To"] = antwort_an
     msg["Subject"] = betreff
     msg["Date"] = formatdate(localtime=True)
     msg["X-Unsent"] = "1"          # klassisches Outlook: als neue Nachricht öffnen
@@ -436,7 +447,11 @@ def main() -> int:
     ap.add_argument("--anhang", default="anhang", help="Ordner mit Anhängen (Standard: anhang/)")
     ap.add_argument("--out", default="dist", help="Zielordner (Standard: dist/, je Variante ein Unterordner)")
     ap.add_argument("--betreff", help="Betreff für alle Varianten (Standard: betreff aus der JSON, sonst <title>)")
-    ap.add_argument("--absender", default=ABSENDER, help="Absender der E-Mail")
+    ap.add_argument("--absender", default=None,
+                    help="Absender eintragen (Standard: keiner – Outlook nimmt das eigene Konto; "
+                         "ein Funktionspostfach braucht die Exchange-Berechtigung „Senden als“)")
+    ap.add_argument("--antwort-an", default=ANTWORT_AN,
+                    help="Reply-To, damit Antworten am Funktionspostfach landen (Standard: Ausbildungsberatung)")
     ap.add_argument("--streng", action="store_true",
                     help="Abbruch mit Fehler bei offenen Platzhaltern oder fehlendem Logo")
     args = ap.parse_args()
@@ -451,7 +466,8 @@ def main() -> int:
     tokens = lade_tokens(theme)
     vorlage = quelle.read_text(encoding="utf-8")
     varianten = lade_varianten(ROOT / args.varianten, args.variante)
-    print(f"Absender: {args.absender}")
+    print(f"Absender: {args.absender or 'eigenes Outlook-Konto (kein From in der .eml)'}")
+    print(f"Antworten an: {args.antwort_an or '–'}")
     ernst = False
 
     for v in varianten:
@@ -484,7 +500,7 @@ def main() -> int:
                 alt.unlink()
         (out / f"{name}.html").write_text(html_vorschau, encoding="utf-8")
         (out / f"{name}.txt").write_text(text, encoding="utf-8")
-        (out / f"{name}.eml").write_bytes(eml_bauen(html_mail, text, bilder, anhaenge, betreff, args.absender))
+        (out / f"{name}.eml").write_bytes(eml_bauen(html_mail, text, bilder, anhaenge, betreff, args.absender, args.antwort_an))
 
         kb = lambda p: (out / p).stat().st_size / 1024
         rel = out.relative_to(ROOT)

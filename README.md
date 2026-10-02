@@ -71,7 +71,19 @@ Anhänge.
 
 ## Versandwege im Detail
 
-**Outlook (klassisch).** Doppelklick auf `newsletter.eml` öffnet die Datei dank
+**Absender.** Die `.eml` trägt absichtlich keinen Absender: Outlook sendet aus
+dem Konto, in dem du sie öffnest. Antworten landen über die Kopfzeile
+`Reply-To` trotzdem im Funktionspostfach abteilung3@rpf.bwl.de (in der
+geöffneten Nachricht unter *Optionen → Antworten an* sichtbar; falls leer, dort
+eintragen). Soll das Funktionspostfach selbst als Absender erscheinen, braucht
+dein Konto in Exchange die Berechtigung **„Senden als“** für dieses Postfach
+(bei BITBW beantragen); erst dann `--absender "Ausbildungsberatung Grüne
+Berufe <abteilung3@rpf.bwl.de>"` setzen. Ohne diese Berechtigung weist der
+Server die Nachricht beim Senden ab („Sie besitzen nicht die Berechtigung, die
+Nachricht im Auftrag des angegebenen Benutzers zu senden“, SendAsDenied) – dann
+ist nichts rausgegangen.
+
+**Outlook (klassisch).** Doppelklick auf die `.eml` öffnet die Datei dank
 der Kopfzeile `X-Unsent: 1` direkt als neue, noch nicht gesendete Nachricht –
 Empfänger in Bcc, Anhänge prüfen, senden. Erscheint stattdessen ein Lesefenster
 (etwa weil das neue Outlook oder Windows Mail für `.eml` zuständig ist): die

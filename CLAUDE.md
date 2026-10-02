@@ -87,7 +87,10 @@ Tracking):
 - **Bezeichnung in der Mail:** „Ausbilder-Info“, nie „Newsletter“, keine
   Ausgabennummern – es soll keine Erwartung regelmäßiger Post entstehen.
   „Newsletter“ ist nur der interne Name von Repo, Build und Dateien.
-- **Absender** ist das Funktionspostfach `abteilung3@rpf.bwl.de`; Empfänger nur
+- **Absender:** Die `.eml` trägt kein „From“ – Outlook sendet aus dem Konto
+  der versendenden Person; `Reply-To` ist das Funktionspostfach
+  `abteilung3@rpf.bwl.de`. Das Funktionspostfach als Absender (`--absender`)
+  nur mit Exchange-Berechtigung „Senden als“, sonst SendAsDenied. Empfänger nur
   per **Bcc**; Impressum und Datenschutz im Fuß sind Pflicht. Ein Abmeldelink
   steht bewusst nicht in der Mail (Entscheidung des Fachbereichs, Oktober 2026);
   Abmeldungen laufen als Antwort auf das Funktionspostfach.
