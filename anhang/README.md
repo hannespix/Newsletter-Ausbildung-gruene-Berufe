@@ -6,20 +6,21 @@ Der Build hängt je Variante an (siehe `varianten/*.json`):
 2. alles aus **`anhang/alle/`** (geht an beide Varianten),
 3. alles aus **`anhang/<variante>/`** (`anhang/gaertner/`, `anhang/gruene-berufe/`).
 
-Die Dateien hier werden **nicht** versioniert (`.gitignore`) – sie liegen im
-Repo `Rechte-und-Pflichten-von-Azubis` unter `pdf/` und werden von dort kopiert,
-damit nichts auseinanderläuft. README-Dateien werden nie angehängt.
+Die Dateien liegen **im Repo** (privat), damit auch der CI-Build vollständige
+Mails liefert. Quelle der Leitfäden bleibt das Repo
+`Rechte-und-Pflichten-von-Azubis`: Bei einer neuen Fassung die Datei hier
+ersetzen, Dateinamen beibehalten. README-Dateien werden nie angehängt.
 
-Für die Ausgabe September 2026 (sobald die Leitfäden fertig sind):
+Stand Oktober 2026:
 
 ```
-pdf/… Azubi-Info Rechte und Pflichten.pdf           → anhang/alle/
-pdf/… Leitfaden Ausbildung (Gartenbau).pdf          → anhang/gaertner/
-pdf/… Leitfaden Ausbildung (Grüne Berufe).pdf       → anhang/gruene-berufe/
+anhang/alle/Azubi-Info-Rechte-und-Pflichten-2026.pdf        Azubi-Info „Gut durch die Ausbildung“ (Stand 15.09.2026)
+anhang/gaertner/Leitfaden-Ausbildung-Gartenbau-2026.pdf     Leitfaden „Klar handeln“, Fassung Gartenbau (02.10.2026)
+anhang/gruene-berufe/Leitfaden-Ausbildung-Gruene-Berufe-2026.pdf  Leitfaden, Fassung Grüne Berufe (02.10.2026)
 ```
 
-Tipp: kurze, sprechende Dateinamen ohne Umlaute vermeiden Ärger bei manchen
-Mailservern, z. B. `Leitfaden-Ausbildung-Gartenbau-2026.pdf`.
+Die Dateinamen sind bewusst kurz und ohne Umlaute (manche Mailserver
+verstümmeln sonst den Namen).
 
 Wird nur ein Dokument mitgeschickt, die zweite Dokument-Karte in
 `newsletter.html` (Abschnitt 2) entfernen.

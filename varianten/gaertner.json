@@ -1,6 +1,7 @@
 {
   "_hinweis": "Variante Gärtner – Ausbildungsbetriebe im Gartenbau. Werte ersetzen {{SCHLÜSSEL}} in newsletter.html; Blöcke <!--[wenn gaertner]--> … <!--[/wenn]--> bleiben stehen, andere fallen weg. Anhänge: anhang/alle/ + anhang/gaertner/ + merkblatt.",
   "ausgabe": "gaertner",
+  "dateiname": "Ausbilder-Info-2026-10-Gartenbau",
   "name": "Gärtnerinnen und Gärtner (Gartenbau)",
   "betreff": "Ausbilder-Info Gartenbau: Urlaub im Abschlussjahr, Leitfaden Rechte und Pflichten, Save the Date Ausbildertag on tour 2027",
   "merkblatt": "Merkblatt-Urlaub-letztes-Ausbildungsjahr-Gartenbau.pdf",

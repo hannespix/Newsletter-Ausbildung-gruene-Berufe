@@ -19,12 +19,13 @@ Was passiert:
      in anhang/alle/ und anhang/<variante>/ (außer README.md).
   6. Prüfung: offene Platzhalter in eckigen Klammern werden gemeldet.
 
-Ausgabe (dist/<variante>/):
-  newsletter.html   Vorschau im Browser (Bilder eingebettet, Styles aufgelöst)
-  newsletter.eml    E-Mail zum Öffnen in Outlook oder Thunderbird. Die Kopfzeile
+Ausgabe (dist/<variante>/, Dateiname aus „dateiname“ der Varianten-JSON,
+z. B. Ausbilder-Info-2026-10-Gartenbau):
+  <dateiname>.html  Vorschau im Browser (Bilder eingebettet, Styles aufgelöst)
+  <dateiname>.eml   E-Mail zum Öffnen in Outlook oder Thunderbird. Die Kopfzeile
                     „X-Unsent: 1“ lässt das klassische Outlook die Datei direkt
                     als neue, noch nicht gesendete Nachricht öffnen.
-  newsletter.txt    Nur-Text-Fassung
+  <dateiname>.txt   Nur-Text-Fassung
 
 Aufruf:  python3 tools/build_newsletter.py [--variante gaertner] [--streng] [--absender "…"]
 Nur Python-Standardbibliothek, keine Abhängigkeiten.
@@ -477,20 +478,25 @@ def main() -> int:
 
         out = ROOT / args.out / v["ausgabe"]
         out.mkdir(parents=True, exist_ok=True)
-        (out / "newsletter.html").write_text(html_vorschau, encoding="utf-8")
-        (out / "newsletter.txt").write_text(text, encoding="utf-8")
-        (out / "newsletter.eml").write_bytes(eml_bauen(html_mail, text, bilder, anhaenge, betreff, args.absender))
+        name = re.sub(r"[^\w.-]+", "-", v.get("dateiname") or f"ausbilder-info-{v['ausgabe']}")
+        for alt in out.glob("*"):          # alte Ausgaben der Variante wegräumen
+            if alt.is_file() and alt.suffix in (".eml", ".html", ".txt"):
+                alt.unlink()
+        (out / f"{name}.html").write_text(html_vorschau, encoding="utf-8")
+        (out / f"{name}.txt").write_text(text, encoding="utf-8")
+        (out / f"{name}.eml").write_bytes(eml_bauen(html_mail, text, bilder, anhaenge, betreff, args.absender))
 
         kb = lambda p: (out / p).stat().st_size / 1024
+        rel = out.relative_to(ROOT)
         print(f"\n== Variante {v['ausgabe']}: {v.get('name', '')}")
         print(f"Betreff : {betreff}")
-        print(f"OK  -> {out.relative_to(ROOT)}/newsletter.html  ({kb('newsletter.html'):.0f} KB)  Vorschau im Browser")
-        print(f"OK  -> {out.relative_to(ROOT)}/newsletter.eml   ({kb('newsletter.eml'):.0f} KB)  "
+        print(f"OK  -> {rel}/{name}.html  ({kb(name + '.html'):.0f} KB)  Vorschau im Browser")
+        print(f"OK  -> {rel}/{name}.eml   ({kb(name + '.eml'):.0f} KB)  "
               f"{len(bilder)} Bild(er) eingebettet ({sum(len(b.daten) for b in bilder) / 1024:.0f} KB), "
               f"{len(anhaenge)} Anhang/Anhänge")
         for a in anhaenge:
             print(f"         + {a.name} ({a.stat().st_size / 1024:.0f} KB)")
-        print(f"OK  -> {out.relative_to(ROOT)}/newsletter.txt   Nur-Text-Fassung")
+        print(f"OK  -> {rel}/{name}.txt   Nur-Text-Fassung")
         mail_kb = len(html_mail.encode("utf-8")) / 1024
         if mail_kb > GMAIL_GRENZE_KB:
             hinweise.append(f"HTML der E-Mail ist {mail_kb:.0f} KB – Gmail kürzt Nachrichten über ~102 KB.")
@@ -508,7 +514,7 @@ def main() -> int:
     if args.streng and ernst:
         print("\nAbbruch (--streng): Platzhalter ersetzen bzw. Logo ablegen und erneut bauen.")
         return 1
-    print("\nVersand: dist/<variante>/newsletter.eml in Outlook öffnen, Empfänger in Bcc eintragen, senden (siehe README).")
+    print("\nVersand: die .eml der Variante in Outlook öffnen, Empfänger in Bcc eintragen, senden (siehe README).")
     return 0
 
 

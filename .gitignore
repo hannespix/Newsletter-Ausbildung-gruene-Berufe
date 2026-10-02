@@ -1,11 +1,9 @@
 # Build-Ausgabe (versandfertige Dateien entstehen lokal oder als CI-Artefakt)
 /dist/
 
-# Anhänge: die Leitfaden-PDFs liegen im Repo Rechte-und-Pflichten-von-Azubis
-# (pdf/) und werden vor dem Build nach anhang/alle/ bzw. anhang/<variante>/
-# kopiert – nicht doppelt versionieren. Nur die README bleibt im Repo.
-anhang/**
-!anhang/README.md
+# Anhänge (anhang/alle/, anhang/<variante>/) sind versioniert, damit der
+# CI-Build vollständige Mails liefert. Das Repo ist privat; die PDFs enthalten
+# lizenzierte Schriften und Bilder (siehe README, Recht & Lizenz).
 
 # Zwischendateien des Merkblatt-Builds
 merkblatt/.build-*.html

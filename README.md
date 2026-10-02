@@ -38,33 +38,34 @@ befüllt. Eine weitere Variante ist eine weitere JSON-Datei.
    Abschnitt 3 (aus dem Save-the-Date-Flyer übernommen). Neue Platzhalter in
    eckigen Klammern meldet der Build. Programm, Anmeldeweg und ein
    Anmelde-Button kommen mit der eigentlichen Einladung (siehe `ROADMAP.md`).
-2. **Anhänge ablegen.** Die PDFs aus `Rechte-und-Pflichten-von-Azubis/pdf/`
-   kopieren: Azubi-Info nach `anhang/alle/`, Leitfaden Gartenbau nach
-   `anhang/gaertner/`, Leitfaden Grüne Berufe nach `anhang/gruene-berufe/`. Das
-   Merkblatt der Variante hängt automatisch an – Details in
-   [`anhang/README.md`](anhang/README.md).
+2. **Anhänge prüfen.** Azubi-Info in `anhang/alle/`, Leitfaden Gartenbau in
+   `anhang/gaertner/`, Leitfaden Grüne Berufe in `anhang/gruene-berufe/` –
+   alles im Repo, bei neuer Fassung ersetzen. Das Merkblatt der Variante hängt
+   automatisch an – Details in [`anhang/README.md`](anhang/README.md).
 3. **Bauen.**
    ```bash
    python3 tools/build_newsletter.py
    ```
-   Erzeugt je Variante in `dist/gaertner/` und `dist/gruene-berufe/`:
-   `newsletter.eml` (Versand), `newsletter.html` (Vorschau im Browser),
-   `newsletter.txt` (Nur-Text-Fassung). `--variante gaertner` baut nur eine,
-   `--streng` bricht bei offenen Platzhaltern ab.
-4. **Prüfen.** Beide `dist/<variante>/newsletter.html` im Browser ansehen (auch
-   schmal ziehen), dann je Variante eine Testmail an die eigene Adresse und an
-   eine externe Adresse (z. B. ein Gmail-Konto) schicken.
-5. **Versenden.** `dist/gaertner/newsletter.eml` an den Gartenbau-Verteiler,
-   `dist/gruene-berufe/newsletter.eml` an die übrigen Grünen Berufe – jeweils in
-   Outlook öffnen, Empfänger in **Bcc**, Anhänge prüfen, senden. Bei großen
-   Verteilern in mehreren Tranchen (Grenzen des Mailservers beachten).
+   Erzeugt je Variante in `dist/gaertner/` und `dist/gruene-berufe/` drei
+   Dateien mit sprechendem Namen aus der Varianten-JSON (`dateiname`), z. B.
+   `Ausbilder-Info-2026-10-Gartenbau.eml` (Versand), `.html` (Vorschau im
+   Browser) und `.txt` (Nur-Text-Fassung). `--variante gaertner` baut nur
+   eine, `--streng` bricht bei offenen Platzhaltern ab.
+4. **Prüfen.** Beide `.html`-Vorschauen im Browser ansehen (auch schmal
+   ziehen), dann je Variante eine Testmail an die eigene Adresse und an eine
+   externe Adresse (z. B. ein Gmail-Konto) schicken.
+5. **Versenden.** `Ausbilder-Info-2026-10-Gartenbau.eml` an den
+   Gartenbau-Verteiler, `Ausbilder-Info-2026-10-Gruene-Berufe.eml` an die
+   übrigen Grünen Berufe – jeweils in Outlook öffnen, Empfänger in **Bcc**,
+   Anhänge prüfen, senden. Bei großen Verteilern in mehreren Tranchen
+   (Grenzen des Mailservers beachten).
 
 ### Ohne Python: Build aus GitHub Actions
 
-Bei jedem Push baut der Workflow **„Newsletter-Check“** den Newsletter und legt
-`dist/` als Artefakt ab: *Actions → Lauf öffnen → Artefakt „newsletter“
-herunterladen.* Die Anhänge liegen nicht im Repo, dieses `.eml` enthält also
-keine PDFs – in Outlook vor dem Senden anhängen.
+Bei jedem Push baut der Workflow **„Newsletter-Check“** beide Varianten und
+legt `dist/` als Artefakt ab: *Actions → Lauf öffnen → Artefakt „newsletter“
+herunterladen.* Die `.eml`-Dateien darin sind vollständig, inklusive aller
+Anhänge.
 
 ---
 
@@ -170,7 +171,7 @@ assets/fotos/                Fotos des Save-the-Date-Flyers, auf 600×432 px zug
 assets/fonts/                BaWue Sans/Serif (woff2/woff) — nur für Merkblatt-PDFs, lizenzpflichtig
 merkblatt/                   Merkblätter: HTML-Quelle im Landesdesign + gedrucktes PDF
 tools/build_merkblatt.js     druckt merkblatt/*.html als getaggtes A4-PDF (Chromium)
-anhang/alle/ · anhang/<variante>/  Anhänge der E-Mail (nicht versioniert)
+anhang/alle/ · anhang/<variante>/  Anhänge der E-Mail (versioniert, Repo privat)
 tools/build_newsletter.py    Build: Tokens auflösen, Logo einbetten, .eml/.html/.txt
 tools/check_offline.py       Offline-/CDN-Prüfung (CI-Gate)
 .github/workflows/ci.yml     Offline-Check + Build beider Varianten + Artefakt bei jedem Push/PR
@@ -188,9 +189,9 @@ CLAUDE.md AGENTS.md ROADMAP.md
   Wird das Repo je öffentlich, beides ausschließen und aus der Historie
   entfernen – der Build setzt dann eine Wortmarke ein. Die Schriften werden nur
   in die Merkblatt-PDFs eingebettet, nie in die E-Mail.
-- Die Leitfaden-PDFs enthalten lizenzierte Schriften und Bildmaterial; sie
-  bleiben im Repo `Rechte-und-Pflichten-von-Azubis` und werden nur lokal nach
-  `anhang/` kopiert.
+- Die Leitfaden-PDFs in `anhang/` enthalten lizenzierte Schriften und
+  Bildmaterial; sie liegen nur hier, weil das Repo privat ist. Quelle und
+  Pflege bleiben im Repo `Rechte-und-Pflichten-von-Azubis`.
 - **Fotos** (`assets/fotos/`) stammen aus dem Save-the-Date-Flyer des RPF; nur
   Bilder verwenden, deren Nutzungsrechte beim RP Freiburg liegen. Bildnachweise
   gehören unter das Raster oder in den Fuß.

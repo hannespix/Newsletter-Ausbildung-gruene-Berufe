@@ -25,14 +25,14 @@ Theme, nicht im Newsletter.
 ## 1. Projektstruktur
 ```
 newsletter.html              ← die aktuelle Ausgabe (Quelle, nur --bw-* Tokens, Variantenblöcke)
-varianten/                   ← je Variante eine JSON (gaertner, gruene-berufe): Betreff, Eyebrow, Kontakt, Merkblatt
+varianten/                   ← je Variante eine JSON (gaertner, gruene-berufe): Dateiname, Betreff, Eyebrow, Kontakt, Merkblatt
 bw-theme.css                 ← Design-System, Single Source of Truth
 assets/logo/                 ← RPF-Logo (rpf-logo.png, -negativ.png) — lizenzpflichtig
 assets/fotos/                ← Fotos (JPEG, vorab auf Zellmaß zugeschnitten, mit Nutzungsrechten)
 assets/fonts/                ← BaWue Sans/Serif — nur für Merkblatt-PDFs, nie in der Mail
 merkblatt/                   ← Merkblätter (HTML im Landesdesign + gedrucktes PDF, hängt an)
 tools/build_merkblatt.js     ← druckt merkblatt/*.html als getaggtes A4-PDF (Chromium)
-anhang/alle/ · anhang/<variante>/ ← Anhänge der E-Mail (nicht versioniert)
+anhang/alle/ · anhang/<variante>/ ← Anhänge der E-Mail (versioniert, Repo privat)
 tools/build_newsletter.py    ← Build: Tokens, Logo (Content-ID), .eml/.html/.txt
 tools/check_offline.py       ← findet externe Lade-Referenzen (CI-Gate)
 dist/                        ← Build-Ausgabe (nicht versioniert)
@@ -172,7 +172,7 @@ in jeder Mail; Schriftgröße ≥ 12 px, Fließtext 16 px.
 ## 7. Arbeitsweise
 1. Erst prüfen, ob die vorhandenen Bausteine (3.1) reichen.
 2. `python3 tools/build_newsletter.py` laufen lassen, **jede Variante** unter
-   `dist/<variante>/newsletter.html` im Browser (breit und schmal) prüfen,
+   `dist/<variante>/<dateiname>.html` im Browser (breit und schmal) prüfen,
    Textfassung lesen; nach Änderungen am Merkblatt `node tools/build_merkblatt.js`.
 3. `python3 tools/check_offline.py` grün; CI-Checkliste (4) und
    Barrierefreiheit (5) vor jedem Commit durchgehen.
