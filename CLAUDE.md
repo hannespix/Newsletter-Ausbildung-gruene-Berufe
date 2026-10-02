@@ -88,7 +88,9 @@ Tracking):
   Ausgabennummern – es soll keine Erwartung regelmäßiger Post entstehen.
   „Newsletter“ ist nur der interne Name von Repo, Build und Dateien.
 - **Absender** ist das Funktionspostfach `abteilung3@rpf.bwl.de`; Empfänger nur
-  per **Bcc**; Abmeldehinweis und Impressum/Datenschutz im Fuß sind Pflicht.
+  per **Bcc**; Impressum und Datenschutz im Fuß sind Pflicht. Ein Abmeldelink
+  steht bewusst nicht in der Mail (Entscheidung des Fachbereichs, Oktober 2026);
+  Abmeldungen laufen als Antwort auf das Funktionspostfach.
 
 ---
 
@@ -120,7 +122,7 @@ auf 600×432 px zugeschnitten, weil `object-fit` in Mails nicht greift), darunte
 schwarzes Band mit Serif-Titel, Unterzeile `--bw-grau-200`, Trennlinie
 `--bw-grau-700`, Termine als gelbe Zahlen mit Ort in `--bw-grau-300`, Störer
 rund, gelber Button nur, wenn es etwas anzumelden gibt · Schluss/Gruß · **Kontaktkasten** · **Fuß** schwarz mit Negativ-Logo,
-Impressum · Datenschutz · Barrierefreiheit · Abmelden.
+Impressum · Datenschutz · Barrierefreiheit.
 
 ## 3.2 Zahlen, Termine, Texte
 - Zahlen in **de-DE** (Tausenderpunkt, Dezimalkomma), geschützte Leerzeichen

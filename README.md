@@ -106,7 +106,7 @@ durch die Bild-URLs des Systems ersetzen. Die Nur-Text-Fassung liegt in
 | ✓-Liste, Hinweiskasten (grau, schwarzer Balken) | `.bw-hinweis` |
 | Zwei Dokument-Karten (halbiert) | `.bw-flaechen.bw-halb` |
 | Save-the-Date-Block im Flyer-Layout: 2×2-Fotoraster, schwarzes Band mit Serif-Titel, drei gelben Terminen und rundem Störer (Button erst mit der Einladung) | `.bw-flaeche--schwarz`, `.bw-stoerer` |
-| Kontaktkasten, schwarzer Fuß mit Negativ-Logo, Impressum/Datenschutz/Abmelden | `.bw-footer` |
+| Kontaktkasten, schwarzer Fuß mit Negativ-Logo, Impressum/Datenschutz/Barrierefreiheit | `.bw-footer` |
 
 Farben und Schriften stehen in `newsletter.html` ausschließlich als
 `var(--bw-*)` aus `bw-theme.css`. Der Build setzt die festen Werte ein, weil
