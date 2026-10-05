@@ -87,6 +87,11 @@ Tracking):
 - **Bezeichnung in der Mail:** „Ausbilder-Info“, nie „Newsletter“, keine
   Ausgabennummern – es soll keine Erwartung regelmäßiger Post entstehen.
   „Newsletter“ ist nur der interne Name von Repo, Build und Dateien.
+- **.eml-Aufbau:** Outlooks eigene MIME-Struktur (`multipart/mixed` →
+  `multipart/related; type="multipart/alternative"` → `multipart/alternative`),
+  Bilder `inline` mit Content-ID, Anhänge `attachment`, dazu `Message-ID` und
+  `X-Unsent: 1`. Nur so zeigt Outlook Bilder im Text statt als Anhang; der
+  Build prüft die Struktur (`eml_pruefen`) und bricht sonst ab.
 - **Absender:** Die `.eml` trägt kein „From“ – Outlook sendet aus dem Konto
   der versendenden Person; `Reply-To` ist das Funktionspostfach
   `abteilung3@rpf.bwl.de`. Das Funktionspostfach als Absender (`--absender`)

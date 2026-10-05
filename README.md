@@ -83,6 +83,18 @@ Server die Nachricht beim Senden ab („Sie besitzen nicht die Berechtigung, die
 Nachricht im Auftrag des angegebenen Benutzers zu senden“, SendAsDenied) – dann
 ist nichts rausgegangen.
 
+**Anhänge und Bilder.** Jede `.eml` enthält genau zwei Anhänge: das
+Urlaubs-Merkblatt und den Leitfaden der jeweiligen Variante (`anhang/<variante>/`,
+dazu alles aus `anhang/alle/`). Logo und Fotos sind keine Anhänge, sondern im
+Text eingebettet (Content-ID). Die `.eml` ist dafür genau so aufgebaut, wie
+Outlook selbst HTML-Mails mit Bildern erzeugt (`multipart/mixed` →
+`multipart/related` → `multipart/alternative`), und trägt eine `Message-ID`;
+der Build liest jede Datei zurück und bricht ab, wenn ein Bild nicht im Text
+verwendet wird oder ein Anhang fehlt. Listet Outlook die Bilddateien trotzdem
+unter den Anhängen, ist das ein bekannter Fehler älterer Outlook-Versionen beim
+Öffnen von Entwürfen (behoben in Microsoft 365 Apps Ende 2023): Outlook
+aktualisieren; die Bilder erscheinen bei den Empfängern dennoch im Text.
+
 **Outlook (klassisch).** Doppelklick auf die `.eml` öffnet die Datei dank
 der Kopfzeile `X-Unsent: 1` direkt als neue, noch nicht gesendete Nachricht –
 Empfänger in Bcc, Anhänge prüfen, senden. Erscheint stattdessen ein Lesefenster

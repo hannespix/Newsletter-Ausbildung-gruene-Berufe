@@ -43,8 +43,9 @@ import sys
 import textwrap
 from dataclasses import dataclass
 from email import policy
-from email.message import EmailMessage
-from email.utils import formatdate
+from email.message import EmailMessage, MIMEPart
+from email.parser import BytesParser
+from email.utils import formatdate, make_msgid
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -347,6 +348,41 @@ def textfassung(html: str) -> str:
 # ------------------------------------------------------------------ E-Mail
 def eml_bauen(html_mail: str, text: str, bilder: list, anhaenge: list, betreff: str,
               absender: str | None, antwort_an: str | None) -> bytes:
+    """Baut die .eml so auf, wie Outlook selbst HTML-Mails mit eingebetteten
+    Bildern aufbaut. Nur in dieser Struktur zeigt Outlook die Bilder sicher im
+    Text und nicht zusätzlich als Anhang (auch beim Öffnen als Entwurf):
+
+        multipart/mixed                                 (nur mit Anhängen)
+        ├─ multipart/related; type="multipart/alternative"   (nur mit Bildern)
+        │  ├─ multipart/alternative
+        │  │  ├─ text/plain
+        │  │  └─ text/html            (verweist per cid: auf die Bilder)
+        │  └─ image/…                 (Content-Disposition: inline, Content-ID)
+        └─ application/pdf …          (Content-Disposition: attachment)
+
+    Die Teile sind MIMEPart (keine MIME-Version je Teil). Die Message-ID ist
+    nötig, damit aktuelles Outlook den Entwurf speichern und senden kann.
+    """
+    def teil() -> MIMEPart:
+        return MIMEPart(policy=policy.SMTP)
+
+    alternative = teil()
+    alternative.set_content(text, subtype="plain", charset="utf-8", cte="quoted-printable")
+    alternative.add_alternative(html_mail, subtype="html", charset="utf-8", cte="quoted-printable")
+
+    inhalt = alternative
+    if bilder:
+        inhalt = teil()
+        inhalt["Content-Type"] = 'multipart/related; type="multipart/alternative"'
+        inhalt.attach(alternative)
+        for b in bilder:
+            maintype, subtype = b.mime.split("/", 1)
+            bild = teil()
+            bild.set_content(b.daten, maintype=maintype, subtype=subtype, cte="base64",
+                             disposition="inline", filename=b.pfad.name,
+                             cid=f"<{b.cid}>", params={"name": b.pfad.name})
+            inhalt.attach(bild)
+
     msg = EmailMessage(policy=policy.SMTP)
     # Kein From: Outlook sendet dann aus dem eigenen Konto. Ein fremder Absender
     # (Funktionspostfach) braucht in Exchange die Berechtigung „Senden als“,
@@ -357,20 +393,78 @@ def eml_bauen(html_mail: str, text: str, bilder: list, anhaenge: list, betreff: 
         msg["Reply-To"] = antwort_an
     msg["Subject"] = betreff
     msg["Date"] = formatdate(localtime=True)
+    msg["Message-ID"] = make_msgid(domain=CID_DOMAIN)
     msg["X-Unsent"] = "1"          # klassisches Outlook: als neue Nachricht öffnen
     msg["X-Priority"] = "3"
-    msg.set_content(text, subtype="plain", charset="utf-8", cte="quoted-printable")
-    msg.add_alternative(html_mail, subtype="html", charset="utf-8", cte="quoted-printable")
-    html_teil = msg.get_payload()[-1]
-    for b in bilder:
-        maintype, subtype = b.mime.split("/", 1)
-        html_teil.add_related(b.daten, maintype=maintype, subtype=subtype,
-                              cid=f"<{b.cid}>", filename=b.pfad.name, disposition="inline")
-    for a in anhaenge:
-        typ = mimetypes.guess_type(a.name)[0] or "application/octet-stream"
-        maintype, subtype = typ.split("/", 1)
-        msg.add_attachment(a.read_bytes(), maintype=maintype, subtype=subtype, filename=a.name)
+    msg["MIME-Version"] = "1.0"
+    if anhaenge:
+        msg["Content-Type"] = "multipart/mixed"
+        msg.attach(inhalt)
+        for a in anhaenge:
+            typ = mimetypes.guess_type(a.name)[0] or "application/octet-stream"
+            maintype, subtype = typ.split("/", 1)
+            anhang = teil()
+            anhang.set_content(a.read_bytes(), maintype=maintype, subtype=subtype, cte="base64",
+                               disposition="attachment", filename=a.name, params={"name": a.name})
+            msg.attach(anhang)
+    else:
+        msg["Content-Type"] = str(inhalt["Content-Type"])
+        for p in inhalt.iter_parts():
+            msg.attach(p)
     return msg.as_bytes(policy=policy.SMTP)
+
+
+def eml_pruefen(daten: bytes, bilder: list, anhaenge: list) -> list[str]:
+    """Liest die fertige .eml zurück und prüft die Struktur, die Outlook braucht.
+    Gibt eine Liste von Fehlern zurück (leer = in Ordnung)."""
+    fehler: list[str] = []
+    msg = BytesParser(policy=policy.default).parsebytes(daten)
+    ebene1 = msg
+    if anhaenge:
+        if msg.get_content_type() != "multipart/mixed":
+            fehler.append(f"oberste Ebene ist {msg.get_content_type()}, erwartet multipart/mixed")
+            return fehler
+        teile = list(msg.iter_parts())
+        ebene1 = teile[0] if teile else msg
+        gefunden = {t.get_filename(): len(t.get_payload(decode=True) or b"")
+                    for t in teile[1:] if t.get_content_disposition() == "attachment"}
+        for a in anhaenge:
+            if gefunden.get(a.name) != a.stat().st_size:
+                fehler.append(f"Anhang fehlt oder ist unvollständig: {a.name}")
+        if len(teile) - 1 != len(anhaenge):
+            fehler.append(f"{len(teile) - 1} Anhangsteile, erwartet {len(anhaenge)}")
+    if bilder:
+        if ebene1.get_content_type() != "multipart/related" \
+                or ebene1.get_param("type") != "multipart/alternative":
+            fehler.append("Bilder liegen nicht in multipart/related; type=\"multipart/alternative\"")
+            return fehler
+        teile = list(ebene1.iter_parts())
+        alternative = teile[0] if teile else ebene1
+        bildteile = teile[1:]
+    else:
+        alternative, bildteile = ebene1, []
+    if alternative.get_content_type() != "multipart/alternative":
+        fehler.append(f"Textteil ist {alternative.get_content_type()}, erwartet multipart/alternative")
+        return fehler
+    typen = [t.get_content_type() for t in alternative.iter_parts()]
+    if typen != ["text/plain", "text/html"]:
+        fehler.append(f"multipart/alternative enthält {typen}, erwartet text/plain + text/html")
+        return fehler
+    html = list(alternative.iter_parts())[1].get_content()
+    ohne_kommentare = re.sub(r"<!--[\s\S]*?-->", "", html)   # Outlook zählt Verweise in Kommentaren nicht
+    verweise = set(re.findall(r'src="cid:([^"]+)"', ohne_kommentare))
+    for t in bildteile:
+        cid = (t.get("Content-ID") or "").strip("<>")
+        if t.get_content_disposition() != "inline":
+            fehler.append(f"Bild {t.get_filename()} ist nicht inline")
+        if cid not in verweise:
+            fehler.append(f"Bild {t.get_filename()} wird im HTML nicht verwendet → erschiene als Anhang")
+        verweise.discard(cid)
+    for cid in sorted(verweise):
+        fehler.append(f"HTML verweist auf fehlendes Bild cid:{cid}")
+    if "Message-ID" not in msg or msg.get("X-Unsent") != "1":
+        fehler.append("Message-ID oder X-Unsent fehlt (Outlook öffnet die Datei sonst nicht als Entwurf)")
+    return fehler
 
 
 # --------------------------------------------------------------- Varianten
@@ -500,7 +594,12 @@ def main() -> int:
                 alt.unlink()
         (out / f"{name}.html").write_text(html_vorschau, encoding="utf-8")
         (out / f"{name}.txt").write_text(text, encoding="utf-8")
-        (out / f"{name}.eml").write_bytes(eml_bauen(html_mail, text, bilder, anhaenge, betreff, args.absender, args.antwort_an))
+        eml = eml_bauen(html_mail, text, bilder, anhaenge, betreff, args.absender, args.antwort_an)
+        probleme = eml_pruefen(eml, bilder, anhaenge)
+        if probleme:
+            sys.exit(f"FEHLER: {name}.eml hat nicht die Struktur, die Outlook braucht:\n  - "
+                     + "\n  - ".join(probleme))
+        (out / f"{name}.eml").write_bytes(eml)
 
         kb = lambda p: (out / p).stat().st_size / 1024
         rel = out.relative_to(ROOT)
